@@ -1,0 +1,45 @@
+# Configuração Automática de HTTPS com Caddy para o FisgaRank
+# Substitua pelo seu domínio oficial (ex: fisgarank.com.br) ou deixe ativo para múltiplos domínios.
+
+{
+    email suporte@fisgarank.com.br
+}
+
+# Domínio Principal (.com.br)
+fisgarank.com.br, www.fisgarank.com.br {
+    encode gzip zstd
+    
+    # Aumenta limite de upload para vídeos de medição de até 500MB
+    request_body {
+        max_size 500MB
+    }
+
+    reverse_proxy app:3000 {
+        header_up Host {host}
+        header_up X-Real-IP {remote_host}
+        header_up X-Forwarded-For {remote_host}
+        header_up X-Forwarded-Proto {scheme}
+    }
+}
+
+# Domínio Global (.com)
+fisgarank.com, www.fisgarank.com {
+    encode gzip zstd
+
+    request_body {
+        max_size 500MB
+    }
+
+    reverse_proxy app:3000 {
+        header_up Host {host}
+        header_up X-Real-IP {remote_host}
+        header_up X-Forwarded-For {remote_host}
+        header_up X-Forwarded-Proto {scheme}
+    }
+}
+
+# Fallback por IP direto (enquanto o DNS não propagar)
+:80 {
+    reverse_proxy app:3000
+}
+
