@@ -71,22 +71,22 @@ export default function AdminInscricoesPage() {
                   </td>
                   <td className="py-3.5 px-4">
                     {insc.status_pagamento === 'pago' && (
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-950 text-emerald-300 border border-emerald-800">
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
                         Pago
                       </span>
                     )}
                     {insc.status_pagamento === 'isento' && (
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#060a13] text-[#e5c158] border border-[#e5c158]/40">
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium bg-[#060a13] text-[#e5c158] border border-[#e5c158]/40">
                         Isento (Staff/Juiz)
                       </span>
                     )}
                     {insc.status_pagamento === 'pendente' && (
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-950 text-amber-300 border border-amber-800">
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium bg-zinc-800 text-zinc-300 border border-zinc-700/50">
                         Aguardando Pix
                       </span>
                     )}
                     {insc.status_pagamento === 'cancelado' && (
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-red-950 text-red-300 border border-red-800">
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium bg-rose-500/10 text-rose-400 border border-rose-500/20">
                         Cancelado
                       </span>
                     )}

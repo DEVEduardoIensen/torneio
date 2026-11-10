@@ -38,7 +38,7 @@ export function PainelHeader({ mobileMenuOpen, onToggleMobileMenu }: PainelHeade
 
         {/* Palavra-Chave da Etapa Ativa */}
         {etapaAtiva && (
-          <div className="hidden sm:flex items-center gap-3 bg-[#060a13] border border-[#e5c158]/25 rounded-full px-4 py-1.5 shadow-sm">
+          <div className="hidden sm:flex items-center gap-3 bg-[#060a13] border border-[#e5c158]/25 rounded-lg px-3.5 py-1.5 shadow-sm">
             <span className="text-xs font-medium text-[#a1a8b9] truncate">
               {etapaAtiva.titulo}:
             </span>
@@ -57,7 +57,7 @@ export function PainelHeader({ mobileMenuOpen, onToggleMobileMenu }: PainelHeade
         {/* Botão Rápido de Enviar Captura */}
         <Link
           href="/painel/registros"
-          className="hidden md:inline-flex items-center gap-2 h-9 px-4 rounded-full bg-[#e5c158] hover:bg-[#cfab44] text-[#060a13] text-xs font-bold transition-colors shadow-sm cursor-pointer"
+          className="hidden md:inline-flex items-center gap-2 h-9 px-4 rounded-lg bg-[#e5c158] hover:bg-[#cfab44] text-[#060a13] text-xs font-bold transition-colors shadow-sm cursor-pointer"
         >
           <Fish className="w-4 h-4 shrink-0" />
           <span>Enviar Captura</span>
@@ -68,24 +68,24 @@ export function PainelHeader({ mobileMenuOpen, onToggleMobileMenu }: PainelHeade
           <button
             type="button"
             onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-            className="flex items-center gap-2.5 bg-[#060a13] hover:bg-white/5 border border-white/10 hover:border-[#e5c158]/30 rounded-full px-3.5 py-1.5 text-left transition-colors cursor-pointer"
+            className="flex items-center gap-2.5 bg-[#060a13] hover:bg-white/5 border border-white/10 hover:border-[#e5c158]/30 rounded-lg px-3 py-1.5 text-left transition-colors cursor-pointer"
             aria-expanded={userDropdownOpen}
             aria-label="Alternar perfil ativo"
           >
             <User className="w-4 h-4 text-[#e5c158] shrink-0" />
             <div className="text-xs">
-              <div className="font-heading font-semibold text-[#f3f4f6] leading-tight">
+              <div className="font-medium text-[#f3f4f6] leading-tight">
                 {currentUser?.nome || 'Selecionar Perfil'}
               </div>
               <div className="text-xs text-[#a1a8b9] capitalize leading-tight">
-                {currentUser?.role || 'pescador'} • {currentUser?.numero_inscricao || '#001'}
+                {currentUser?.cidade_uf || 'Atleta'}
               </div>
             </div>
             <ChevronDown className="w-3.5 h-3.5 text-[#e5c158]" />
           </button>
 
           {userDropdownOpen && (
-            <div className="absolute right-0 mt-2 w-72 bg-[#080c14] border border-[#e5c158]/35 rounded-2xl shadow-2xl p-2.5 z-50">
+            <div className="absolute right-0 mt-2 w-72 bg-[#080c14] border border-[#e5c158]/35 rounded-xl shadow-2xl p-2.5 z-50">
               <div className="px-3 py-2 border-b border-white/10 text-xs font-semibold text-[#a1a8b9]">
                 Alternar usuário ativo (Simulador de Perfis)
               </div>
@@ -98,24 +98,24 @@ export function PainelHeader({ mobileMenuOpen, onToggleMobileMenu }: PainelHeade
                       switchUser(p.id);
                       setUserDropdownOpen(false);
                     }}
-                    className={`w-full flex items-center justify-between px-3 py-2.5 text-left text-xs rounded-xl transition-colors cursor-pointer ${
+                    className={`w-full flex items-center justify-between px-3 py-2.5 text-left text-xs rounded-lg transition-colors cursor-pointer ${
                       currentUser?.id === p.id
                         ? 'bg-[#e5c158] text-[#060a13] font-bold'
                         : 'text-[#f3f4f6] hover:bg-white/5'
                     }`}
                   >
                     <div>
-                      <div className="font-heading font-semibold">{p.nome}</div>
+                      <div className="font-medium">{p.nome}</div>
                       <div
                         className={`text-xs ${
                           currentUser?.id === p.id ? 'text-[#060a13]/80' : 'text-[#a1a8b9]'
                         }`}
                       >
-                        {p.cidade_uf} • {p.numero_inscricao || 'S/N'}
+                        {p.cidade_uf}
                       </div>
                     </div>
                     <span
-                      className={`px-2 py-0.5 rounded-full text-xs font-mono uppercase font-bold ${
+                      className={`px-2 py-0.5 rounded-md text-xs font-mono uppercase font-bold ${
                         currentUser?.id === p.id
                           ? 'bg-[#060a13] text-[#e5c158]'
                           : 'bg-[#060a13] text-[#a1a8b9] border border-white/10'

@@ -117,15 +117,15 @@ export function RegistroEnvioForm({
   return (
     <form
       onSubmit={handleSubmit}
-      className="lg:col-span-2 bg-[#080c14] border border-[#e5c158]/25 rounded-2xl p-6 space-y-5 shadow-xl"
+      className="lg:col-span-2 bg-[#080c14] border border-[#e5c158]/25 rounded-xl p-6 space-y-5 shadow-xl"
     >
       <div className="flex items-center justify-between border-b border-white/10 pb-4">
         <div>
-          <h2 className="text-lg font-heading font-bold text-[#f3f4f6]">
-            Dados da Captura ({currentUser?.nome})
+          <h2 className="text-lg font-semibold text-[#f3f4f6]">
+            Dados da Captura
           </h2>
           <p className="text-xs text-[#a1a8b9]">
-            Inscrição vinculada: {currentUser?.numero_inscricao || '#001'}
+            Competidor: <span className="text-[#f3f4f6] font-medium">{currentUser?.nome}</span> • {currentUser?.cidade_uf}
           </p>
         </div>
         {etapaAtiva && (
@@ -141,7 +141,7 @@ export function RegistroEnvioForm({
       {feedback && (
         <div
           role="alert"
-          className={`rounded-xl px-4 py-3 text-sm font-medium border ${
+          className={`rounded-lg px-4 py-3 text-sm font-medium border ${
             feedback.type === 'ok'
               ? 'bg-emerald-950/90 border-emerald-800 text-emerald-200'
               : 'bg-rose-950/90 border-rose-800 text-rose-200'
@@ -153,22 +153,22 @@ export function RegistroEnvioForm({
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label htmlFor="cat-select" className="block text-sm font-medium text-[#f3f4f6] mb-1.5">
-            Categoria pretendida
+          <label htmlFor="especie-select" className="block text-sm font-medium text-[#f3f4f6] mb-1.5">
+            Espécie do Peixe
           </label>
           <select
-            id="cat-select"
+            id="especie-select"
             value={categoriaId}
             onChange={(e) => {
               setCategoriaId(e.target.value);
               const found = activeCategories.find((c) => c.id === e.target.value);
               if (found) onSelectedCategoriaChange(found);
             }}
-            className="w-full h-11 px-3.5 rounded-xl bg-[#060a13] border border-white/10 text-sm text-[#f3f4f6] focus:outline-none focus:border-[#e5c158]"
+            className="w-full h-11 px-3.5 rounded-lg bg-[#060a13] border border-white/10 text-sm text-[#f3f4f6] focus:outline-none focus:border-[#e5c158]"
           >
             {activeCategories.map((c) => (
               <option key={c.id} value={c.id}>
-                {c.nome} (Mín. {c.medida_minima} {c.unidade_medida})
+                {c.especie} (Mín. {c.medida_minima} {c.unidade_medida})
               </option>
             ))}
           </select>
@@ -182,7 +182,7 @@ export function RegistroEnvioForm({
             id="etapa-select"
             value={etapaId}
             onChange={(e) => setEtapaId(e.target.value)}
-            className="w-full h-11 px-3.5 rounded-xl bg-[#060a13] border border-white/10 text-sm text-[#f3f4f6] focus:outline-none focus:border-[#e5c158]"
+            className="w-full h-11 px-3.5 rounded-lg bg-[#060a13] border border-white/10 text-sm text-[#f3f4f6] focus:outline-none focus:border-[#e5c158]"
           >
             {etapas.map((et) => (
               <option key={et.id} value={et.id}>
@@ -311,7 +311,7 @@ export function RegistroEnvioForm({
       <button
         type="submit"
         disabled={submitting}
-        className="w-full h-11 rounded-full bg-[#e5c158] hover:bg-[#cfab44] disabled:opacity-60 text-[#060a13] font-heading font-bold text-sm flex items-center justify-center gap-2 transition-colors cursor-pointer shadow-md"
+        className="w-full h-11 rounded-lg bg-[#e5c158] hover:bg-[#cfab44] disabled:opacity-60 text-[#060a13] font-bold text-sm flex items-center justify-center gap-2 transition-colors cursor-pointer shadow-md"
       >
         <Upload className="w-4 h-4" />
         <span>

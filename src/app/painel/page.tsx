@@ -53,7 +53,7 @@ export default function PainelOverviewPage() {
   return (
     <div className="space-y-8">
       {/* Banner Principal da Temporada e Etapa em Andamento */}
-      <section className="bg-[#080c14] border border-[#e5c158]/25 rounded-2xl p-6 sm:p-8 shadow-xl">
+      <section className="bg-[#080c14] border border-[#e5c158]/25 rounded-xl p-6 sm:p-8 shadow-xl">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
           <div className="flex flex-col sm:flex-row sm:items-center gap-5">
             <img
@@ -69,7 +69,7 @@ export default function PainelOverviewPage() {
                   {inscricoes.filter((i) => i.status_pagamento !== 'cancelado').length} competidores inscritos
                 </span>
               </div>
-              <h1 className="text-2xl sm:text-3xl font-heading font-bold text-[#f3f4f6] tracking-tight">
+              <h1 className="text-2xl sm:text-3xl font-bold text-[#f3f4f6] tracking-tight">
                 {temporada.nome}
               </h1>
               <p className="text-sm text-[#a1a8b9] mt-1 max-w-2xl">
@@ -81,14 +81,14 @@ export default function PainelOverviewPage() {
           <div className="flex flex-wrap items-center gap-3 shrink-0">
             <Link
               href="/painel/registros"
-              className="inline-flex items-center gap-2 h-11 px-5 rounded-full bg-[#e5c158] hover:bg-[#cfab44] text-[#060a13] font-heading font-bold text-sm transition-colors shadow-md cursor-pointer"
+              className="inline-flex items-center gap-2 h-11 px-5 rounded-lg bg-[#e5c158] hover:bg-[#cfab44] text-[#060a13] font-bold text-sm transition-colors shadow-md cursor-pointer"
             >
               <Fish className="w-4 h-4 shrink-0" />
               <span>Registrar Nova Captura</span>
             </Link>
             <Link
               href="/painel/ranking"
-              className="inline-flex items-center gap-2 h-11 px-4 rounded-full bg-[#0d1626] hover:bg-[#121c2e] border border-[#e5c158]/30 hover:border-[#e5c158] text-[#f3f4f6] font-heading font-semibold text-sm transition-colors cursor-pointer"
+              className="inline-flex items-center gap-2 h-11 px-4 rounded-lg bg-[#0d1626] hover:bg-[#121c2e] border border-[#e5c158]/30 hover:border-[#e5c158] text-[#f3f4f6] font-semibold text-sm transition-colors cursor-pointer"
             >
               <Trophy className="w-4 h-4 text-[#e5c158]" />
               <span>Ver Classificação</span>
@@ -100,7 +100,7 @@ export default function PainelOverviewPage() {
           <div className="mt-6 pt-5 border-t border-white/10 grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
             <div>
               <span className="text-xs text-[#a1a8b9] block">Etapa Vigente</span>
-              <strong className="text-[#f3f4f6] font-heading font-semibold text-base">{etapaAtiva.titulo}</strong>
+              <strong className="text-[#f3f4f6] font-semibold text-base">{etapaAtiva.titulo}</strong>
               <span className="text-xs text-[#a1a8b9] block mt-0.5">{etapaAtiva.local_pesca}</span>
             </div>
             <div>

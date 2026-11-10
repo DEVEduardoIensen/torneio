@@ -46,18 +46,24 @@ export default function AdminRegistrosPage() {
               st === 'todos'
                 ? registros.length
                 : registros.filter((r) => r.status === st).length;
+            const labelMap = {
+              pendente: 'Em Análise',
+              aprovado: 'Homologados',
+              reprovado: 'Reprovados',
+              todos: 'Todos',
+            };
             return (
               <button
                 key={st}
                 type="button"
                 onClick={() => setStatusFilter(st)}
-                className={`px-4 py-2 rounded-full text-xs font-heading font-semibold capitalize transition-colors cursor-pointer tabular-nums ${
+                className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors cursor-pointer tabular-nums ${
                   statusFilter === st
-                    ? 'bg-[#e5c158] text-[#060a13]'
+                    ? 'bg-[#e5c158] text-[#060a13] font-bold'
                     : 'bg-[#080c14] text-[#f3f4f6] hover:border-[#e5c158]/50 border border-white/10'
                 }`}
               >
-                {st} ({count})
+                {labelMap[st]} ({count})
               </button>
             );
           })}

@@ -21,17 +21,17 @@ export function CapturasSemCorteTable({ capturas }: CapturasSemCorteTableProps) 
         </p>
       </div>
 
-      <div className="bg-[#080c14] border border-white/10 rounded-2xl overflow-hidden shadow-xl">
+      <div className="bg-[#080c14] border border-white/10 rounded-xl overflow-hidden shadow-xl">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="border-b border-white/10 bg-[#0d1626] text-xs font-semibold text-[#a1a8b9]">
-                <th scope="col" className="py-3.5 px-4">Posição</th>
-                <th scope="col" className="py-3.5 px-4">Competidor</th>
-                <th scope="col" className="py-3.5 px-4">Espécie e Categoria</th>
-                <th scope="col" className="py-3.5 px-4">Isca Artificial</th>
-                <th scope="col" className="py-3.5 px-4">Local da Captura</th>
-                <th scope="col" className="py-3.5 px-4 text-right">Medida Homologada</th>
+              <tr className="border-b border-white/10 bg-[#080c14] text-xs font-medium text-[#a1a8b9]">
+                <th scope="col" className="py-3 px-4">Posição</th>
+                <th scope="col" className="py-3 px-4">Competidor</th>
+                <th scope="col" className="py-3 px-4">Espécie e Categoria</th>
+                <th scope="col" className="py-3 px-4">Isca Artificial</th>
+                <th scope="col" className="py-3 px-4">Local da Captura</th>
+                <th scope="col" className="py-3 px-4 text-right">Medida Homologada</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-white/5 text-sm">
@@ -44,18 +44,18 @@ export function CapturasSemCorteTable({ capturas }: CapturasSemCorteTableProps) 
               ) : (
                 capturas.map((reg, index) => (
                   <tr key={reg.id} className="hover:bg-white/5 transition-colors">
-                    <td className="py-3.5 px-4 font-heading font-bold tabular-nums text-[#e5c158]">
+                    <td className="py-3 px-4 font-bold tabular-nums text-[#e5c158]">
                       {index + 1}º
                     </td>
-                    <td className="py-3.5 px-4">
+                    <td className="py-3 px-4">
                       <Link
                         href={`/painel/pescadores/${reg.pescador_id}`}
-                        className="font-heading font-semibold text-[#f3f4f6] hover:text-[#e5c158] block"
+                        className="font-medium text-[#f3f4f6] hover:text-[#e5c158] block"
                       >
                         {reg.pescador_nome}
                       </Link>
-                      <span className="text-xs text-[#a1a8b9] tabular-nums">
-                        {reg.numero_inscricao} • {reg.pescador_cidade_uf}
+                      <span className="text-xs text-[#a1a8b9]">
+                        {reg.pescador_cidade_uf}
                       </span>
                     </td>
                     <td className="py-3.5 px-4">

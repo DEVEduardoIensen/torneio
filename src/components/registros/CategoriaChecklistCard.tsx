@@ -10,12 +10,12 @@ interface CategoriaChecklistCardProps {
 
 export function CategoriaChecklistCard({ categoria }: CategoriaChecklistCardProps) {
   return (
-    <div className="bg-[#080c14] border border-[#e5c158]/25 rounded-2xl p-6 space-y-4 shadow-xl">
+    <div className="bg-[#080c14] border border-[#e5c158]/25 rounded-xl p-6 space-y-4 shadow-xl">
       <div>
         <span className="text-xs font-semibold text-[#e5c158]">
           Regras Auditadas na Categoria
         </span>
-        <h2 className="text-lg font-heading font-bold text-[#f3f4f6] mt-0.5">
+        <h2 className="text-lg font-semibold text-[#f3f4f6] mt-0.5">
           {categoria.nome}
         </h2>
         <p className="text-xs text-[#a1a8b9] mt-1">

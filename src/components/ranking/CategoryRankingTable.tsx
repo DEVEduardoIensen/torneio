@@ -74,20 +74,20 @@ export function CategoryRankingTable({
       </div>
 
       {/* Tabela Oficial de Classificação */}
-      <div className="bg-[#080c14] border border-white/10 rounded-2xl overflow-hidden shadow-xl">
+      <div className="bg-[#080c14] border border-white/10 rounded-xl overflow-hidden shadow-xl">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="border-b border-white/10 bg-[#0d1626] text-xs font-semibold text-[#a1a8b9]">
-                <th scope="col" className="py-3.5 px-4 w-24">Colocação</th>
-                <th scope="col" className="py-3.5 px-4">Competidor / Equipe</th>
-                <th scope="col" className="py-3.5 px-4">
+              <tr className="border-b border-white/10 bg-[#080c14] text-xs font-medium text-[#a1a8b9]">
+                <th scope="col" className="py-3 px-4 w-24">Colocação</th>
+                <th scope="col" className="py-3 px-4">Competidor / Equipe</th>
+                <th scope="col" className="py-3 px-4">
                   Exemplares Computados na Nota
                 </th>
-                <th scope="col" className="py-3.5 px-4 text-right">
+                <th scope="col" className="py-3 px-4 text-right">
                   Maior Peixe (Desempate)
                 </th>
-                <th scope="col" className="py-3.5 px-4 text-right">
+                <th scope="col" className="py-3 px-4 text-right">
                   Pontuação Final
                 </th>
               </tr>
@@ -108,30 +108,30 @@ export function CategoryRankingTable({
               ) : (
                 currentCatResult.entries.map((entry) => (
                   <tr key={entry.pescador_id} className="hover:bg-white/5 transition-colors">
-                    <td className="py-4 px-4 tabular-nums">
+                    <td className="py-3.5 px-4 tabular-nums">
                       <span
-                        className={`inline-flex items-center justify-center px-2.5 py-1 rounded-full text-xs font-heading font-bold ${
+                        className={`inline-flex items-center justify-center px-2 py-0.5 rounded-md text-xs font-medium ${
                           entry.posicao === 1
-                            ? 'bg-[#e5c158] text-[#060a13] shadow-sm'
+                            ? 'bg-[#e5c158] text-[#060a13] font-bold'
                             : entry.posicao === 2
-                            ? 'bg-[#0d1626] border border-white/20 text-[#f3f4f6]'
+                            ? 'bg-zinc-800 text-zinc-200 border border-zinc-700/50'
                             : entry.posicao === 3
-                            ? 'bg-[#0d1626] border border-[#e5c158]/35 text-[#e5c158]'
-                            : 'bg-[#060a13] border border-white/10 text-[#a1a8b9]'
+                            ? 'bg-zinc-800 text-[#e5c158] border border-[#e5c158]/30'
+                            : 'bg-zinc-900 text-zinc-400 border border-zinc-800'
                         }`}
                       >
-                        {entry.posicao}º Lugar
+                        {entry.posicao}º
                       </span>
                     </td>
-                    <td className="py-4 px-4">
+                    <td className="py-3.5 px-4">
                       <Link
                         href={`/painel/pescadores/${entry.pescador_id}`}
-                        className="font-heading font-bold text-[#f3f4f6] hover:text-[#e5c158] block"
+                        className="font-medium text-[#f3f4f6] hover:text-[#e5c158] block"
                       >
                         {entry.pescador_nome}
                       </Link>
-                      <span className="text-xs text-[#a1a8b9] tabular-nums">
-                        {entry.numero_inscricao} • {entry.cidade_uf} • {entry.equipe}
+                      <span className="text-xs text-[#a1a8b9]">
+                        {entry.cidade_uf}{entry.equipe ? ` • ${entry.equipe}` : ''}
                       </span>
                     </td>
                     <td className="py-4 px-4">

@@ -37,7 +37,7 @@ export function CategoryLeaderCards({ categoryRankings, formatFormula }: Categor
           return (
             <div
               key={categoria.id}
-              className="bg-[#080c14] border border-white/10 hover:border-[#e5c158]/35 rounded-2xl p-5 flex flex-col justify-between transition-colors"
+              className="bg-[#080c14] border border-white/10 hover:border-[#e5c158]/35 rounded-xl p-5 flex flex-col justify-between transition-colors"
             >
               <div>
                 <div className="flex items-center justify-between gap-2 text-xs text-[#a1a8b9] mb-2">
@@ -46,7 +46,7 @@ export function CategoryLeaderCards({ categoryRankings, formatFormula }: Categor
                     Mín. {categoria.medida_minima} {categoria.unidade_medida}
                   </span>
                 </div>
-                <h3 className="text-base font-heading font-bold text-[#f3f4f6]">{categoria.nome}</h3>
+                <h3 className="text-base font-semibold text-[#f3f4f6]">{categoria.nome}</h3>
                 <p className="text-xs text-[#a1a8b9] mt-1">
                   Regra: {formatFormula(categoria.formula_ranking, categoria.top_n_peixes, categoria.unidade_medida)}
                 </p>
@@ -58,15 +58,15 @@ export function CategoryLeaderCards({ categoryRankings, formatFormula }: Categor
                         <span className="text-xs font-semibold text-[#e5c158]">
                           1º Colocado Atual
                         </span>
-                        <span className="text-base font-heading font-bold text-[#e5c158] tabular-nums">
+                        <span className="text-base font-bold text-[#e5c158] tabular-nums">
                           {leader.pontuacao_total.toFixed(1)} {categoria.unidade_medida}
                         </span>
                       </div>
                       <Link
                         href={`/painel/pescadores/${leader.pescador_id}`}
-                        className="text-sm font-heading font-bold text-[#f3f4f6] hover:text-[#e5c158] block mt-1"
+                        className="text-sm font-semibold text-[#f3f4f6] hover:text-[#e5c158] block mt-1"
                       >
-                        {leader.pescador_nome} ({leader.numero_inscricao})
+                        {leader.pescador_nome}
                       </Link>
                       <div className="text-xs text-[#a1a8b9] mt-0.5 tabular-nums">
                         {leader.cidade_uf} • Maior peixe: {leader.maior_exemplar.toFixed(1)}{' '}

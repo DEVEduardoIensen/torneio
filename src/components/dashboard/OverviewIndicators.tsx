@@ -22,12 +22,12 @@ export function OverviewIndicators({
 
   return (
     <section aria-label="Resumo numérico da temporada" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      <div className="bg-[#080c14] border border-white/10 hover:border-[#e5c158]/30 rounded-2xl p-5 transition-colors">
+      <div className="bg-[#080c14] border border-white/10 hover:border-[#e5c158]/30 rounded-xl p-5 transition-colors">
         <div className="flex items-center justify-between text-xs font-medium text-[#a1a8b9]">
           <span>Categorias Dinâmicas</span>
           <Sliders className="w-4 h-4 text-[#e5c158]" />
         </div>
-        <div className="text-2xl font-heading font-bold text-[#f3f4f6] mt-2 tabular-nums">
+        <div className="text-2xl font-bold text-[#f3f4f6] mt-2 tabular-nums">
           {categorias.filter((c) => c.ativa).length}
         </div>
         <div className="text-xs text-[#a1a8b9] mt-1">
@@ -35,12 +35,12 @@ export function OverviewIndicators({
         </div>
       </div>
 
-      <div className="bg-[#080c14] border border-white/10 hover:border-[#e5c158]/30 rounded-2xl p-5 transition-colors">
+      <div className="bg-[#080c14] border border-white/10 hover:border-[#e5c158]/30 rounded-xl p-5 transition-colors">
         <div className="flex items-center justify-between text-xs font-medium text-[#a1a8b9]">
           <span>Capturas Homologadas</span>
           <CheckCircle2 className="w-4 h-4 text-emerald-400" />
         </div>
-        <div className="text-2xl font-heading font-bold text-[#f3f4f6] mt-2 tabular-nums">
+        <div className="text-2xl font-bold text-[#f3f4f6] mt-2 tabular-nums">
           {aprovados.length}
         </div>
         <div className="text-xs text-[#a1a8b9] mt-1 tabular-nums">
@@ -48,12 +48,12 @@ export function OverviewIndicators({
         </div>
       </div>
 
-      <div className="bg-[#080c14] border border-[#e5c158]/25 rounded-2xl p-5 transition-colors">
+      <div className="bg-[#080c14] border border-[#e5c158]/25 rounded-xl p-5 transition-colors">
         <div className="flex items-center justify-between text-xs font-medium text-[#a1a8b9]">
           <span>Maior Exemplar Homologado</span>
           <Ruler className="w-4 h-4 text-[#e5c158]" />
         </div>
-        <div className="text-2xl font-heading font-bold text-[#e5c158] mt-2 tabular-nums">
+        <div className="text-2xl font-bold text-[#e5c158] mt-2 tabular-nums">
           {maiorPeixeTemporada > 0 ? `${maiorPeixeTemporada.toFixed(1)} cm` : '—'}
         </div>
         <div className="text-xs text-[#a1a8b9] mt-1">
@@ -61,12 +61,12 @@ export function OverviewIndicators({
         </div>
       </div>
 
-      <div className="bg-[#080c14] border border-white/10 hover:border-[#e5c158]/30 rounded-2xl p-5 transition-colors">
+      <div className="bg-[#080c14] border border-white/10 hover:border-[#e5c158]/30 rounded-xl p-5 transition-colors">
         <div className="flex items-center justify-between text-xs font-medium text-[#a1a8b9]">
           <span>Capturas Completas (Sem Corte)</span>
           <Video className="w-4 h-4 text-[#e5c158]" />
         </div>
-        <div className="text-2xl font-heading font-bold text-[#f3f4f6] mt-2 tabular-nums">
+        <div className="text-2xl font-bold text-[#f3f4f6] mt-2 tabular-nums">
           {totalCompletasSemCorte}
         </div>
         <div className="text-xs text-[#a1a8b9] mt-1">

@@ -64,16 +64,14 @@ export default function PescadorProfilePage({
         </Link>
         <div className="bg-[#080c14] border border-[#e5c158]/25 rounded-2xl p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-6 shadow-xl">
           <div className="flex items-center gap-5">
-            <div className="w-16 h-16 rounded-full bg-[#e5c158] text-[#060a13] font-heading font-bold text-2xl flex items-center justify-center shrink-0 shadow-lg">
+            <div className="w-16 h-16 rounded-xl bg-[#e5c158] text-[#060a13] font-bold text-2xl flex items-center justify-center shrink-0 shadow-lg">
               {pescador.nome.slice(0, 2).toUpperCase()}
             </div>
             <div>
-              <div className="flex items-center gap-2 text-xs font-heading font-bold text-[#e5c158] mb-1">
-                <span>Inscrição Oficial</span>
-                <span>•</span>
-                <span className="font-mono tabular-nums">{pescador.numero_inscricao || '#001'}</span>
+              <div className="text-xs font-semibold text-[#e5c158] mb-1">
+                Atleta Confirmado
               </div>
-              <h1 className="text-2xl sm:text-3xl font-heading font-bold text-[#f3f4f6]">
+              <h1 className="text-2xl sm:text-3xl font-bold text-[#f3f4f6]">
                 {pescador.nome}
               </h1>
               <div className="flex flex-wrap items-center gap-4 text-xs text-[#a1a8b9] mt-2">
@@ -85,7 +83,7 @@ export default function PescadorProfilePage({
                   <Users className="w-3.5 h-3.5 text-[#e5c158]" />
                   <span>Equipe: {pescador.equipe || 'Individual'}</span>
                 </span>
-                <span className="capitalize px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-xs font-mono">
+                <span className="capitalize px-2 py-0.5 rounded-md bg-white/5 border border-white/10 text-xs font-mono">
                   {pescador.role}
                 </span>
               </div>
@@ -123,10 +121,10 @@ export default function PescadorProfilePage({
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-medium text-[#e5c158]">{categoria.especie}</span>
                   <span
-                    className={`px-2 py-0.5 rounded-full text-xs font-heading font-bold tabular-nums ${
+                    className={`px-2 py-0.5 rounded-md text-xs font-medium tabular-nums ${
                       entry.posicao === 1
-                        ? 'bg-[#e5c158] text-[#060a13]'
-                        : 'bg-[#0d1626] text-[#f3f4f6] border border-white/10'
+                        ? 'bg-[#e5c158] text-[#060a13] font-bold'
+                        : 'bg-zinc-800 text-[#f3f4f6] border border-white/10'
                     }`}
                   >
                     {entry.posicao}º Lugar
@@ -154,16 +152,16 @@ export default function PescadorProfilePage({
         <h2 className="text-lg font-heading font-bold text-[#f3f4f6]">
           Histórico de Capturas Homologadas ({capturasHomologadas.length})
         </h2>
-        <div className="bg-[#080c14] border border-white/10 rounded-2xl overflow-hidden shadow-xl">
+        <div className="bg-[#080c14] border border-white/10 rounded-xl overflow-hidden shadow-xl">
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="border-b border-white/10 bg-[#0d1626] text-xs font-semibold text-[#a1a8b9]">
-                  <th scope="col" className="py-3.5 px-4">Espécie / Categoria</th>
-                  <th scope="col" className="py-3.5 px-4">Medida Homologada</th>
-                  <th scope="col" className="py-3.5 px-4">Isca Artificial</th>
-                  <th scope="col" className="py-3.5 px-4">Local</th>
-                  <th scope="col" className="py-3.5 px-4">Status</th>
+                <tr className="border-b border-white/10 bg-[#080c14] text-xs font-medium text-[#a1a8b9]">
+                  <th scope="col" className="py-3 px-4">Espécie / Categoria</th>
+                  <th scope="col" className="py-3 px-4">Medida Homologada</th>
+                  <th scope="col" className="py-3 px-4">Isca Artificial</th>
+                  <th scope="col" className="py-3 px-4">Local</th>
+                  <th scope="col" className="py-3 px-4">Status</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/5 text-sm">
@@ -176,20 +174,20 @@ export default function PescadorProfilePage({
                 ) : (
                   capturasHomologadas.map((c) => (
                     <tr key={c.id} className="hover:bg-white/5 transition-colors">
-                      <td className="py-3.5 px-4">
-                        <div className="font-heading font-semibold text-[#f3f4f6]">{c.categoria_nome}</div>
+                      <td className="py-3 px-4">
+                        <div className="font-medium text-[#f3f4f6]">{c.categoria_nome}</div>
                         <div className="text-xs text-[#a1a8b9]">{c.especie_informada}</div>
                       </td>
-                      <td className="py-3.5 px-4 font-heading font-bold text-[#e5c158] tabular-nums text-base">
+                      <td className="py-3 px-4 font-bold text-[#e5c158] tabular-nums text-base">
                         {(c.medida_aprovada ?? c.medida_declarada).toFixed(1)} cm
                       </td>
-                      <td className="py-3.5 px-4">
+                      <td className="py-3 px-4">
                         <div className="text-[#f3f4f6] font-medium">{c.isca_marca}</div>
                         <div className="text-xs text-[#a1a8b9]">{c.isca_modelo}</div>
                       </td>
-                      <td className="py-3.5 px-4 text-xs text-[#a1a8b9]">{c.local_captura}</td>
-                      <td className="py-3.5 px-4">
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-950/80 text-emerald-300 border border-emerald-800/80">
+                      <td className="py-3 px-4 text-xs text-[#a1a8b9]">{c.local_captura}</td>
+                      <td className="py-3 px-4">
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
                           <CheckCircle2 className="w-3.5 h-3.5" />
                           <span>Homologado</span>
                         </span>

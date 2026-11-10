@@ -72,9 +72,9 @@ export default function PainelInscricoesPage() {
               </div>
             </div>
             <div className="text-right">
-              <span className="text-xs text-[#a1a8b9] block">Nº Inscrição</span>
-              <strong className="font-mono text-xl text-[#e5c158] tabular-nums font-bold">
-                {minhaInscricao?.numero_inscricao || currentUser?.numero_inscricao || 'S/N'}
+              <span className="text-xs text-[#a1a8b9] block">Credencial</span>
+              <strong className="text-xs text-[#e5c158] font-medium">
+                Ativa
               </strong>
             </div>
           </div>
@@ -83,12 +83,12 @@ export default function PainelInscricoesPage() {
             <div className="flex justify-between py-1.5 border-b border-white/5">
               <span className="text-[#a1a8b9]">Status da Homologação</span>
               {minhaInscricao?.status_pagamento === 'pago' ? (
-                <span className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-400 bg-emerald-950/80 px-2.5 py-1 rounded-full border border-emerald-800/80">
+                <span className="inline-flex items-center gap-1.5 text-xs font-medium text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-md border border-emerald-500/20">
                   <CheckCircle2 className="w-3.5 h-3.5" />
                   <span>Passaporte Ativo e Homologado</span>
                 </span>
               ) : (
-                <span className="inline-flex items-center gap-1.5 text-xs font-bold text-[#e5c158] bg-amber-950/80 px-2.5 py-1 rounded-full border border-amber-800/80">
+                <span className="inline-flex items-center gap-1.5 text-xs font-medium text-zinc-300 bg-zinc-800/80 px-2.5 py-1 rounded-md border border-zinc-700/50">
                   <Clock className="w-3.5 h-3.5" />
                   <span>Aguardando Confirmação Pix</span>
                 </span>
@@ -131,19 +131,18 @@ export default function PainelInscricoesPage() {
                   type="button"
                   onClick={handleSolicitarInscricao}
                   disabled={saving}
-                  className="w-full h-11 rounded-full bg-[#e5c158] hover:bg-[#cfab44] disabled:opacity-60 text-[#060a13] font-heading font-bold text-sm flex items-center justify-center gap-2 transition-colors cursor-pointer shadow-md"
+                  className="w-full h-11 rounded-lg bg-[#e5c158] hover:bg-[#cfab44] disabled:opacity-60 text-[#060a13] font-bold text-sm flex items-center justify-center gap-2 transition-colors cursor-pointer shadow-md"
                 >
                   <FileCheck2 className="w-4 h-4" />
                   <span>{saving ? 'Ativando...' : 'Ativar Minha Inscrição Oficial'}</span>
                 </button>
               </div>
             ) : (
-              <div className="p-4 rounded-xl bg-[#0d1626] border border-white/10 text-xs text-[#a1a8b9] flex items-center gap-3">
+              <div className="p-4 rounded-xl bg-[#080c14] border border-white/10 text-xs text-[#a1a8b9] flex items-center gap-3">
                 <ShieldCheck className="w-5 h-5 text-[#e5c158] shrink-0" />
                 <span>
                   Sua inscrição é única e vitalícia para todas as etapas da temporada{' '}
-                  {temporada?.nome}. Apresente seu número #{minhaInscricao.numero_inscricao} nas lojas
-                  conveniadas para obter os descontos.
+                  {temporada?.nome}. Apresente seu nome nas lojas conveniadas para obter os descontos.
                 </span>
               </div>
             )}

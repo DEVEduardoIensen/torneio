@@ -46,15 +46,19 @@ export function CapturaQueueSidebar({
                 <div className="flex items-center justify-between mt-2 text-xs">
                   <span className="text-[#a1a8b9]">{reg.isca_marca}</span>
                   <span
-                    className={`font-semibold capitalize ${
+                    className={`px-2 py-0.5 rounded-md text-xs font-medium ${
                       reg.status === 'aprovado'
-                        ? 'text-emerald-300'
+                        ? 'bg-emerald-500/10 text-emerald-400'
                         : reg.status === 'reprovado'
-                        ? 'text-red-300'
-                        : 'text-[#e5c158]'
+                        ? 'bg-rose-500/10 text-rose-400'
+                        : 'bg-zinc-800 text-zinc-300'
                     }`}
                   >
-                    {reg.status}
+                    {reg.status === 'aprovado'
+                      ? 'Homologado'
+                      : reg.status === 'reprovado'
+                      ? 'Reprovado'
+                      : 'Em Análise'}
                   </span>
                 </div>
               </button>

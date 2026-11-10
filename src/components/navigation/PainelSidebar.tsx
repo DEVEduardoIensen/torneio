@@ -139,7 +139,7 @@ export function PainelSidebar({ onCloseMobile }: PainelSidebarProps) {
                     </span>
                     {item.badge && (
                       <span
-                        className={`ml-2 px-2 py-0.5 rounded-full text-xs font-bold tabular-nums ${
+                        className={`ml-2 px-2 py-0.5 rounded-md text-xs font-bold tabular-nums ${
                           active
                             ? 'bg-[#060a13] text-[#e5c158]'
                             : 'bg-[#e5c158]/15 text-[#e5c158] border border-[#e5c158]/30'
@@ -165,14 +165,14 @@ export function PainelSidebar({ onCloseMobile }: PainelSidebarProps) {
             <span>Trocar</span>
           </Link>
         </div>
-        <div className="text-sm font-heading font-semibold text-[#f3f4f6] truncate">
+        <div className="text-sm font-medium text-[#f3f4f6] truncate">
           {currentUser?.nome || 'Lucas Zanardini'}
         </div>
         <div className="text-xs text-[#a1a8b9] flex items-center gap-2 mt-0.5">
           <span className="capitalize">{currentUser?.role || 'pescador'}</span>
           <span>•</span>
-          <span className="font-mono text-[#e5c158] tabular-nums font-semibold">
-            {currentUser?.numero_inscricao || '#001'}
+          <span className="text-zinc-400">
+            {currentUser?.cidade_uf || 'RS'}
           </span>
         </div>
       </div>

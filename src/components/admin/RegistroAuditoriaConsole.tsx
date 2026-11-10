@@ -74,19 +74,18 @@ export function RegistroAuditoriaConsole({
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-4">
         <div>
-          <h2 className="text-xl font-heading font-bold text-[#f3f4f6]">
+          <h2 className="text-xl font-bold text-[#f3f4f6]">
             {selectedReg.pescador_nome}: {selectedReg.categoria_nome}
           </h2>
           <p className="text-xs text-[#a1a8b9] mt-1">
-            Inscrição {selectedReg.numero_inscricao || 'S/N'} • Local: {selectedReg.local_captura} • Isca:{' '}
-            {selectedReg.isca_marca} {selectedReg.isca_modelo}
+            Local: {selectedReg.local_captura} • Isca: {selectedReg.isca_marca} {selectedReg.isca_modelo}
           </p>
         </div>
 
         <button
           type="button"
           onClick={() => onDelete(selectedReg.id)}
-          className="px-4 py-2 rounded-full bg-red-950 hover:bg-red-900 border border-red-800 text-xs font-semibold text-red-200 transition-colors cursor-pointer self-start"
+          className="px-4 py-2 rounded-lg bg-red-950 hover:bg-red-900 border border-red-800 text-xs font-semibold text-red-200 transition-colors cursor-pointer self-start"
         >
           Excluir Registro
         </button>
@@ -240,7 +239,7 @@ export function RegistroAuditoriaConsole({
             type="button"
             disabled={saving}
             onClick={() => handleEvaluate('reprovado')}
-            className="h-11 px-6 rounded-full bg-red-950 hover:bg-red-900 border border-red-800 text-red-200 font-heading font-semibold text-sm transition-colors cursor-pointer"
+            className="h-11 px-6 rounded-lg bg-red-950 hover:bg-red-900 border border-red-800 text-red-200 font-semibold text-sm transition-colors cursor-pointer"
           >
             Reprovar Captura
           </button>
