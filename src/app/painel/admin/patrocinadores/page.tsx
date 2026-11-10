@@ -1,21 +1,24 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { usePainel } from '@/components/PainelContext';
 import { Patrocinador } from '@/types/domain';
 
 export default function AdminPatrocinadoresPage() {
   const { temporada, patrocinadores, refresh } = usePainel();
+  const initial = patrocinadores[0];
 
-  const [editingId, setEditingId] = useState<string>('novo');
-  const [nome, setNome] = useState('');
-  const [cota, setCota] = useState<Patrocinador['cota']>('ouro');
-  const [segmento, setSegmento] = useState('');
-  const [logoUrl, setLogoUrl] = useState('/brand/logo_header.webp');
-  const [whatsappContato, setWhatsappContato] = useState('');
-  const [enderecoCidade, setEnderecoCidade] = useState('');
-  const [beneficio, setBeneficio] = useState('15% de desconto em compras à vista ou Pix para inscritos.');
-  const [premioIsca, setPremioIsca] = useState('');
+  const [editingId, setEditingId] = useState<string>(initial?.id || 'novo');
+  const [nome, setNome] = useState(initial?.nome || '');
+  const [cota, setCota] = useState<Patrocinador['cota']>(initial?.cota || 'ouro');
+  const [segmento, setSegmento] = useState(initial?.segmento || '');
+  const [logoUrl, setLogoUrl] = useState(initial?.logo_url || '/brand/logo_header.webp');
+  const [whatsappContato, setWhatsappContato] = useState(initial?.whatsapp_contato || '');
+  const [enderecoCidade, setEnderecoCidade] = useState(initial?.endereco_cidade || '');
+  const [beneficio, setBeneficio] = useState(
+    initial?.beneficio_competidor || '15% de desconto em compras à vista ou Pix para inscritos.'
+  );
+  const [premioIsca, setPremioIsca] = useState(initial?.premio_especial_isca || '');
   const [saving, setSaving] = useState(false);
 
   const selectPat = (p: Patrocinador | null) => {
@@ -41,12 +44,6 @@ export default function AdminPatrocinadoresPage() {
     setBeneficio(p.beneficio_competidor);
     setPremioIsca(p.premio_especial_isca);
   };
-
-  useEffect(() => {
-    if (patrocinadores.length > 0 && editingId === 'novo' && !nome) {
-      selectPat(patrocinadores[0]);
-    }
-  }, [patrocinadores]);
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();

@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import Link from 'next/link';
 import { CheckCircle2, Clock, Copy, FileCheck2, ShieldCheck, Store } from 'lucide-react';
 import { usePainel } from '@/components/PainelContext';
 

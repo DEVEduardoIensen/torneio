@@ -2,11 +2,11 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Calendar, CheckCircle2, KeyRound, MapPin, ShieldCheck, Sliders } from 'lucide-react';
+import { CheckCircle2, KeyRound, MapPin, ShieldCheck, Sliders } from 'lucide-react';
 import { usePainel } from '@/components/PainelContext';
 
 export default function PainelEtapasPage() {
-  const { temporada, etapas, categorias, currentUser, loading } = usePainel();
+  const { temporada, etapas, currentUser, loading } = usePainel();
 
   if (loading || !temporada) {
     return (

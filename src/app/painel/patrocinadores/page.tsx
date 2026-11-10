@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Award, MapPin, Phone, Sliders, Store } from 'lucide-react';
+import { Award, MapPin, Phone, Sliders } from 'lucide-react';
 import { usePainel } from '@/components/PainelContext';
 
 export default function PainelPatrocinadoresPage() {

@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 import { Lock, Phone, ShieldCheck, UserCheck, ArrowRight } from 'lucide-react';
 
 export default function LoginPage() {

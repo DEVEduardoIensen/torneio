@@ -2,7 +2,7 @@
 
 import React, { use } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, CheckCircle2, Fish, MapPin, Ruler, Trophy, Users } from 'lucide-react';
+import { ArrowLeft, CheckCircle2, MapPin, Users } from 'lucide-react';
 import { usePainel } from '@/components/PainelContext';
 
 export default function PescadorProfilePage({

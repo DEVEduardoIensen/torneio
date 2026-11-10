@@ -1,24 +1,25 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { usePainel } from '@/components/PainelContext';
 import { Etapa } from '@/types/domain';
 
 export default function AdminEtapasPage() {
   const { temporada, etapas, refresh } = usePainel();
+  const initial = etapas[0];
 
-  const [editingId, setEditingId] = useState<string>('nova');
-  const [numero, setNumero] = useState(1);
-  const [titulo, setTitulo] = useState('');
-  const [subtitulo, setSubtitulo] = useState('');
-  const [localPesca, setLocalPesca] = useState('');
-  const [cidadeUf, setCidadeUf] = useState('');
-  const [dataInicio, setDataInicio] = useState('2026-03-01');
-  const [dataFim, setDataFim] = useState('2026-06-30');
-  const [palavraChave, setPalavraChave] = useState('ELDORADO-OUTONO-26');
-  const [revelar, setRevelar] = useState(true);
-  const [status, setStatus] = useState<Etapa['status']>('em_andamento');
-  const [observacoes, setObservacoes] = useState('');
+  const [editingId, setEditingId] = useState<string>(initial?.id || 'nova');
+  const [numero, setNumero] = useState(initial?.numero || 1);
+  const [titulo, setTitulo] = useState(initial?.titulo || '');
+  const [subtitulo, setSubtitulo] = useState(initial?.subtitulo || '');
+  const [localPesca, setLocalPesca] = useState(initial?.local_pesca || '');
+  const [cidadeUf, setCidadeUf] = useState(initial?.cidade_uf || 'PR');
+  const [dataInicio, setDataInicio] = useState(initial?.data_inicio || '2026-03-01');
+  const [dataFim, setDataFim] = useState(initial?.data_fim || '2026-06-30');
+  const [palavraChave, setPalavraChave] = useState(initial?.palavra_chave || 'ELDORADO-OUTONO-26');
+  const [revelar, setRevelar] = useState(initial?.revelar_palavra_chave ?? true);
+  const [status, setStatus] = useState<Etapa['status']>(initial?.status || 'em_andamento');
+  const [observacoes, setObservacoes] = useState(initial?.observacoes || '');
   const [saving, setSaving] = useState(false);
 
   const selectEtapa = (et: Etapa | null) => {
@@ -50,12 +51,6 @@ export default function AdminEtapasPage() {
     setStatus(et.status);
     setObservacoes(et.observacoes);
   };
-
-  useEffect(() => {
-    if (etapas.length > 0 && editingId === 'nova' && !titulo) {
-      selectEtapa(etapas[0]);
-    }
-  }, [etapas]);
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
