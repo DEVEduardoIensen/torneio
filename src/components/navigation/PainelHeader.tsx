@@ -2,31 +2,21 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { ChevronDown, Fish, KeyRound, Menu, User, X } from 'lucide-react';
+import { ChevronDown, Fish, KeyRound, User } from 'lucide-react';
 import { usePainel } from '../PainelContext';
 
 interface PainelHeaderProps {
-  mobileMenuOpen: boolean;
-  onToggleMobileMenu: () => void;
+  mobileMenuOpen?: boolean;
+  onToggleMobileMenu?: () => void;
 }
 
-export function PainelHeader({ mobileMenuOpen, onToggleMobileMenu }: PainelHeaderProps) {
+export function PainelHeader({}: PainelHeaderProps = {}) {
   const { etapaAtiva, pescadores, currentUser, switchUser } = usePainel();
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-20 bg-[#080c14]/95 backdrop-blur-md border-b border-[#e5c158]/20 px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
       <div className="flex items-center gap-3 min-w-0">
-        {/* Botão Hambúrguer Mobile */}
-        <button
-          type="button"
-          onClick={onToggleMobileMenu}
-          className="lg:hidden p-2 rounded-xl bg-[#060a13] text-[#f3f4f6] hover:text-[#e5c158] border border-white/10"
-          aria-label="Abrir menu de navegação"
-        >
-          {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-        </button>
-
         {/* Logo Mobile */}
         <Link href="/painel" className="flex lg:hidden items-center gap-2.5">
           <img
