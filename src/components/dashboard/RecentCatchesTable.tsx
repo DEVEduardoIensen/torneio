@@ -111,3 +111,4 @@ export function RecentCatchesTable({ registros }: RecentCatchesTableProps) {
     </section>
   );
 }
+

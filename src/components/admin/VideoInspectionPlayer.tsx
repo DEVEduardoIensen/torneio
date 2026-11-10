@@ -87,3 +87,4 @@ export function VideoInspectionPlayer({ videoUrl }: VideoInspectionPlayerProps) 
     </div>
   );
 }
+

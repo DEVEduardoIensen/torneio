@@ -212,3 +212,4 @@ export function deleteEtapa(id: string): void {
   const db = getDb();
   db.prepare(`DELETE FROM etapas WHERE id = ?`).run(id);
 }
+

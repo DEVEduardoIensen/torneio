@@ -14,3 +14,4 @@ Mapeamento entre o Regulamento Oficial da Temporada Eldorado Lake 2026 e a Imple
 | **Art. 8 - Multi-Categorias** | Possibilidade de inscrever o mesmo exemplar em múltiplas categorias compatíveis. | `temporadas.permite_mesmo_peixe_multiplas_categorias` | CONFORME |
 | **Art. 9 - Governança Vibe-Coding** | Todos os arquivos `<= 350` linhas com 4 costuras arquiteturais. | 100% dos arquivos em `src/` auditados e validados | CONFORME |
 | **Art. 10 - Supply Chain Risk** | Zero vulnerabilidades de segurança em dependências. | `npm audit` com zero vulnerabilidades | CONFORME |
+

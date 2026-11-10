@@ -99,3 +99,4 @@ export function CategoryLeaderCards({ categoryRankings, formatFormula }: Categor
     </section>
   );
 }
+

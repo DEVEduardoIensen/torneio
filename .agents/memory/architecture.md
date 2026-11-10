@@ -33,3 +33,4 @@ Plataforma de torneios de pesca esportiva homologada no padrão pesque e solte, 
 ## 4. Segurança e Funções de Acesso
 - Apenas 2 papéis permitidos: `admin` (gestão e arbitragem) e `pescador` (competidor). O papel `juiz` foi consolidado no `admin`.
 - Proteção de rotas em `src/app/painel/admin/layout.tsx` redirecionando usuários sem privilégio.
+

@@ -133,3 +133,4 @@ export function PainelHeader({ mobileMenuOpen, onToggleMobileMenu }: PainelHeade
     </header>
   );
 }
+

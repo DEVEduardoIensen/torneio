@@ -18,3 +18,4 @@ export function authenticatePescador(whatsapp: string, senha: string): Pescador 
   if (!row) return null;
   return getPescadorById(String(row.id));
 }
+

@@ -152,3 +152,4 @@ export function initSchema(db: DatabaseSync): void {
     );
   `);
 }
+

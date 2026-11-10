@@ -126,3 +126,4 @@ export function computeAllRankings(temporadaId: string, etapaId?: string): {
     capturasCompletasSemCorte: allApproved,
   };
 }
+

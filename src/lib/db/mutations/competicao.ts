@@ -332,3 +332,4 @@ export function deleteNotificacao(id: string): void {
   const db = getDb();
   db.prepare(`DELETE FROM notificacoes WHERE id = ?`).run(id);
 }
+

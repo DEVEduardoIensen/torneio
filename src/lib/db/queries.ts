@@ -176,3 +176,4 @@ export function getNotificacoesByTemporada(temporadaId: string): Notificacao[] {
     .all(temporadaId) as Record<string, unknown>[];
   return rows.map(mapNotificacaoRow);
 }
+

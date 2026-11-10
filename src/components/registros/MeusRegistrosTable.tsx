@@ -102,3 +102,4 @@ export function MeusRegistrosTable({ registros, currentUserName }: MeusRegistros
     </section>
   );
 }
+

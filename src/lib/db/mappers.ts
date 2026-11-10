@@ -186,3 +186,4 @@ export function mapNotificacaoRow(row: Record<string, unknown>): Notificacao {
     created_at: String(row.created_at || ''),
   };
 }
+

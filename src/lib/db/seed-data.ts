@@ -205,3 +205,4 @@ export const SEED_PESCADORES = [
   ['pesc-5', '55999550005', '123456', 'Fernando Kroth', 'Kroth', 'Horizontina - RS', 'Traíra Insana', 'pescador'],
   ['pesc-6', '55999660006', '123456', 'Gustavo Scherer', 'Scherer', 'Ijuí - RS', 'Amigos do Rio', 'pescador'],
 ];
+

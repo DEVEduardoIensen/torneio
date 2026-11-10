@@ -20,3 +20,4 @@
 ## Decisão 005: Empacotamento Docker e Caddy para Oracle Cloud Always Free
 - **Contexto:** Hospedagem em infraestrutura Always Free da Oracle Cloud (computação ARM64 Ampere A1).
 - **Decisão:** Construção de `Dockerfile` baseado em Node 22 slim, `docker-compose.yml` com persistência de volumes (`data/` e `public/uploads/`), proxy reverso Caddy com emissão e renovação automática de certificado SSL Let's Encrypt e script de limpeza automática de vídeos com mais de 30 dias (`scripts/cleanup-videos.mjs`).
+

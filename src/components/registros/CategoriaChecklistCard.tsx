@@ -56,3 +56,4 @@ export function CategoriaChecklistCard({ categoria }: CategoriaChecklistCardProp
     </div>
   );
 }
+
