@@ -35,12 +35,18 @@ export async function PUT(req: NextRequest) {
 }
 
 export async function DELETE(req: NextRequest) {
-  const { searchParams } = new URL(req.url);
-  const id = searchParams.get('id');
-  if (!id) {
-    return NextResponse.json({ error: 'ID da categoria é obrigatório.' }, { status: 400 });
+  try {
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get('id');
+    if (!id) {
+      return NextResponse.json({ error: 'ID da categoria é obrigatório.' }, { status: 400 });
+    }
+    deleteCategoria(id);
+    return NextResponse.json({ ok: true });
+  } catch (err) {
+    return NextResponse.json(
+      { error: err instanceof Error ? err.message : 'Erro ao excluir categoria.' },
+      { status: 500 }
+    );
   }
-  deleteCategoria(id);
-  return NextResponse.json({ ok: true });
 }
-

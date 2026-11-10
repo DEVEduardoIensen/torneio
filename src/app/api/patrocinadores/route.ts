@@ -35,12 +35,18 @@ export async function PUT(req: NextRequest) {
 }
 
 export async function DELETE(req: NextRequest) {
-  const { searchParams } = new URL(req.url);
-  const id = searchParams.get('id');
-  if (!id) {
-    return NextResponse.json({ error: 'ID do patrocinador é obrigatório.' }, { status: 400 });
+  try {
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get('id');
+    if (!id) {
+      return NextResponse.json({ error: 'ID do patrocinador é obrigatório.' }, { status: 400 });
+    }
+    deletePatrocinador(id);
+    return NextResponse.json({ ok: true });
+  } catch (err) {
+    return NextResponse.json(
+      { error: err instanceof Error ? err.message : 'Erro ao excluir patrocinador.' },
+      { status: 500 }
+    );
   }
-  deletePatrocinador(id);
-  return NextResponse.json({ ok: true });
 }
-

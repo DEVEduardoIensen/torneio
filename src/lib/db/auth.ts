@@ -3,8 +3,11 @@ import { getDb } from './connection';
 import { getPescadorById } from './queries';
 
 export function authenticatePescador(whatsapp: string, senha: string): Pescador | null {
-  const db = getDb();
+  if (!whatsapp || !senha) return null;
   const digits = whatsapp.replace(/\D/g, '');
+  if (!digits) return null;
+
+  const db = getDb();
   const suffix8 = digits.slice(-8);
   const row = db
     .prepare(`
@@ -18,4 +21,3 @@ export function authenticatePescador(whatsapp: string, senha: string): Pescador 
   if (!row) return null;
   return getPescadorById(String(row.id));
 }
-

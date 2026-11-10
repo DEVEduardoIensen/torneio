@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
 
     const categoria = categorias.find((c) => c.id === body.categoria_id) || categorias[0];
     if (!categoria) {
-      return NextResponse.json({ error: 'Categoria não encontrada.' }, { status: 400 });
+      return NextResponse.json({ error: 'Nenhuma categoria encontrada para registro.' }, { status: 400 });
     }
 
     const medida = Number(body.medida_declarada || 0);
@@ -48,6 +48,10 @@ export async function POST(req: NextRequest) {
       etapas.find((e) => e.id === body.etapa_id) ||
       etapas.find((e) => e.status === 'em_andamento') ||
       etapas[0];
+
+    if (!etapaAtiva) {
+      return NextResponse.json({ error: 'Nenhuma etapa ativa encontrada para registrar captura.' }, { status: 400 });
+    }
 
     const created = createRegistro({
       temporada_id: temp.id,
@@ -101,12 +105,18 @@ export async function PUT(req: NextRequest) {
 }
 
 export async function DELETE(req: NextRequest) {
-  const { searchParams } = new URL(req.url);
-  const id = searchParams.get('id');
-  if (!id) {
-    return NextResponse.json({ error: 'ID do registro é obrigatório.' }, { status: 400 });
+  try {
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get('id');
+    if (!id) {
+      return NextResponse.json({ error: 'ID do registro é obrigatório.' }, { status: 400 });
+    }
+    deleteRegistro(id);
+    return NextResponse.json({ ok: true });
+  } catch (err) {
+    return NextResponse.json(
+      { error: err instanceof Error ? err.message : 'Erro ao excluir registro.' },
+      { status: 500 }
+    );
   }
-  deleteRegistro(id);
-  return NextResponse.json({ ok: true });
 }
-

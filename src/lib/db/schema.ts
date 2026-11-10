@@ -150,6 +150,41 @@ export function initSchema(db: DatabaseSync): void {
       autor_nome TEXT NOT NULL DEFAULT 'Comissão Organizadora',
       created_at TEXT NOT NULL DEFAULT (CURRENT_TIMESTAMP)
     );
+
+    -- =========================================================================
+    -- ÍNDICES B-TREE DE ALTA PERFORMANCE (SPEEDUP & BUSCAS SUB-MILISSEGUNDO)
+    -- =========================================================================
+    CREATE INDEX IF NOT EXISTS idx_registros_ranking 
+      ON registros(temporada_id, categoria_id, status, medida_aprovada DESC);
+
+    CREATE INDEX IF NOT EXISTS idx_registros_pescador 
+      ON registros(pescador_id, temporada_id);
+
+    CREATE INDEX IF NOT EXISTS idx_registros_etapa 
+      ON registros(etapa_id, status);
+
+    CREATE INDEX IF NOT EXISTS idx_registros_status_date 
+      ON registros(status, data_captura DESC);
+
+    CREATE INDEX IF NOT EXISTS idx_inscricoes_temp_pesc 
+      ON inscricoes(temporada_id, pescador_id);
+
+    CREATE INDEX IF NOT EXISTS idx_inscricoes_numero 
+      ON inscricoes(temporada_id, numero_inscricao);
+
+    CREATE INDEX IF NOT EXISTS idx_categorias_temporada 
+      ON categorias(temporada_id, ativa, ordem);
+
+    CREATE INDEX IF NOT EXISTS idx_etapas_temporada 
+      ON etapas(temporada_id, status);
+
+    CREATE INDEX IF NOT EXISTS idx_patrocinadores_ordem 
+      ON patrocinadores(temporada_id, ativo, ordem);
+
+    CREATE INDEX IF NOT EXISTS idx_notificacoes_temp 
+      ON notificacoes(temporada_id, fixado DESC, created_at DESC);
+
+    CREATE INDEX IF NOT EXISTS idx_pescadores_whatsapp 
+      ON pescadores(whatsapp, ativo);
   `);
 }
-

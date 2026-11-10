@@ -10,6 +10,7 @@ export const DB_PATH = path.join(DATA_DIR, 'torneio.db');
 
 declare global {
   var __torneioDb: DatabaseSync | undefined;
+  var __torneioInTransaction: boolean | undefined;
 }
 
 export function ensureDirectories(): void {
@@ -36,12 +37,57 @@ export function getDb(): DatabaseSync {
   }
   ensureDirectories();
   const db = new DatabaseSync(DB_PATH);
-  db.exec('PRAGMA journal_mode = DELETE;');
+
+  // Pragmas de alta performance e concorrência segura (WAL)
+  db.exec('PRAGMA journal_mode = WAL;');
+  db.exec('PRAGMA synchronous = NORMAL;');
+  db.exec('PRAGMA busy_timeout = 5000;');
+  db.exec('PRAGMA cache_size = -64000;'); // 64 MB em RAM para cache de páginas
+  db.exec('PRAGMA temp_store = MEMORY;');
+  db.exec('PRAGMA mmap_size = 268435456;'); // 256 MB memory-mapped I/O
   db.exec('PRAGMA foreign_keys = ON;');
-  
+
   initSchema(db);
   seedDatabase(db);
-  
+
   global.__torneioDb = db;
   return db;
+}
+
+/**
+ * Executa uma operação em bloco atômico transacional (ACID).
+ * Utiliza BEGIN IMMEDIATE para prevenir lock contention no SQLite WAL mode,
+ * e suporta savepoints aninhados se já houver uma transação ativa.
+ */
+export function withTransaction<T>(fn: (db: DatabaseSync) => T): T {
+  const db = getDb();
+  if (global.__torneioInTransaction) {
+    const sp = `sp_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`;
+    db.exec(`SAVEPOINT ${sp};`);
+    try {
+      const result = fn(db);
+      db.exec(`RELEASE SAVEPOINT ${sp};`);
+      return result;
+    } catch (err) {
+      db.exec(`ROLLBACK TO SAVEPOINT ${sp};`);
+      throw err;
+    }
+  }
+
+  global.__torneioInTransaction = true;
+  db.exec('BEGIN IMMEDIATE;');
+  try {
+    const result = fn(db);
+    db.exec('COMMIT;');
+    return result;
+  } catch (err) {
+    try {
+      db.exec('ROLLBACK;');
+    } catch {
+      // Ignora se já revertido
+    }
+    throw err;
+  } finally {
+    global.__torneioInTransaction = false;
+  }
 }

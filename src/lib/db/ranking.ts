@@ -9,14 +9,19 @@ import { getCategoriasByTemporada, getRegistros } from './queries';
 export function computeCategoryRanking(
   temporadaId: string,
   categoria: Categoria,
-  etapaId?: string
+  etapaId?: string,
+  preloadedCatches?: RegistroCaptura[]
 ): CategoryRankingResult {
-  const approved = getRegistros({
-    temporadaId,
-    categoriaId: categoria.id,
-    etapaId: etapaId || undefined,
-    status: 'aprovado',
-  }).filter((r) => {
+  const approved = (
+    preloadedCatches ??
+    getRegistros({
+      temporadaId,
+      categoriaId: categoria.id,
+      etapaId: etapaId || undefined,
+      status: 'aprovado',
+    })
+  ).filter((r) => {
+    if (r.categoria_id !== categoria.id) return false;
     const val = r.medida_aprovada ?? r.medida_declarada;
     return val >= categoria.medida_minima;
   });
@@ -102,18 +107,27 @@ export function computeCategoryRanking(
   };
 }
 
+/**
+ * Apuração de alta performance (O(1) roundtrips ao banco):
+ * Carrega todos os registros aprovados da temporada/etapa em uma única consulta
+ * indexada e projeta os rankings de cada categoria em memória.
+ */
 export function computeAllRankings(temporadaId: string, etapaId?: string): {
   categorias: CategoryRankingResult[];
   capturasCompletasSemCorte: RegistroCaptura[];
 } {
   const categorias = getCategoriasByTemporada(temporadaId, false);
-  const results = categorias.map((cat) => computeCategoryRanking(temporadaId, cat, etapaId));
 
+  // Busca indexada unificada (1 única query ao banco em vez de N + 1)
   const allApproved = getRegistros({
     temporadaId,
     etapaId: etapaId || undefined,
     status: 'aprovado',
-  })
+  });
+
+  const results = categorias.map((cat) => computeCategoryRanking(temporadaId, cat, etapaId, allApproved));
+
+  const capturasCompletasSemCorte = allApproved
     .filter((r) => r.captura_completa_sem_corte)
     .sort((a, b) => {
       const ma = a.medida_aprovada ?? a.medida_declarada;
@@ -123,7 +137,6 @@ export function computeAllRankings(temporadaId: string, etapaId?: string): {
 
   return {
     categorias: results,
-    capturasCompletasSemCorte: allApproved,
+    capturasCompletasSemCorte,
   };
 }
-
