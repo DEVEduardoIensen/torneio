@@ -75,16 +75,20 @@ export default function PescadorProfilePage({
                 {pescador.nome}
               </h1>
               <div className="flex flex-wrap items-center gap-4 text-xs text-[#a1a8b9] mt-2">
-                <span className="flex items-center gap-1.5">
-                  <MapPin className="w-3.5 h-3.5 text-[#e5c158]" />
-                  <span>{pescador.cidade_uf}</span>
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <Users className="w-3.5 h-3.5 text-[#e5c158]" />
-                  <span>Equipe: {pescador.equipe || 'Individual'}</span>
-                </span>
+                {pescador.role !== 'admin' && pescador.cidade_uf && (
+                  <span className="flex items-center gap-1.5">
+                    <MapPin className="w-3.5 h-3.5 text-[#e5c158]" />
+                    <span>{pescador.cidade_uf}</span>
+                  </span>
+                )}
+                {pescador.role !== 'admin' && (
+                  <span className="flex items-center gap-1.5">
+                    <Users className="w-3.5 h-3.5 text-[#e5c158]" />
+                    <span>Equipe: {pescador.equipe || 'Individual'}</span>
+                  </span>
+                )}
                 <span className="capitalize px-2 py-0.5 rounded-md bg-white/5 border border-white/10 text-xs font-mono">
-                  {pescador.role}
+                  {pescador.role === 'admin' ? 'Administrador' : pescador.role}
                 </span>
               </div>
             </div>

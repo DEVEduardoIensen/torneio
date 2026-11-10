@@ -125,7 +125,14 @@ export function RegistroEnvioForm({
             Dados da Captura
           </h2>
           <p className="text-xs text-[#a1a8b9]">
-            Competidor: <span className="text-[#f3f4f6] font-medium">{currentUser?.nome}</span> • {currentUser?.cidade_uf}
+            {currentUser?.role === 'admin' ? (
+              <span className="text-[#f3f4f6] font-medium">{currentUser?.nome} (Administrador)</span>
+            ) : (
+              <>
+                Competidor: <span className="text-[#f3f4f6] font-medium">{currentUser?.nome}</span>
+                {currentUser?.cidade_uf ? ` • ${currentUser.cidade_uf}` : ''}
+              </>
+            )}
           </p>
         </div>
         {etapaAtiva && (

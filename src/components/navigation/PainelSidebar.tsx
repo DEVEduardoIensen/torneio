@@ -169,11 +169,15 @@ export function PainelSidebar({ onCloseMobile }: PainelSidebarProps) {
           {currentUser?.nome || 'Lucas Zanardini'}
         </div>
         <div className="text-xs text-[#a1a8b9] flex items-center gap-2 mt-0.5">
-          <span className="capitalize">{currentUser?.role || 'pescador'}</span>
-          <span>•</span>
-          <span className="text-zinc-400">
-            {currentUser?.cidade_uf || 'RS'}
-          </span>
+          <span className="capitalize">{currentUser?.role === 'admin' ? 'Administrador' : 'Pescador'}</span>
+          {currentUser?.role !== 'admin' && currentUser?.cidade_uf && (
+            <>
+              <span>•</span>
+              <span className="text-zinc-400">
+                {currentUser.cidade_uf}
+              </span>
+            </>
+          )}
         </div>
       </div>
     </div>

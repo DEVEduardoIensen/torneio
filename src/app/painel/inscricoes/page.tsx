@@ -100,10 +100,12 @@ export default function PainelInscricoesPage() {
               <span className="font-mono text-[#f3f4f6] tabular-nums">{currentUser?.whatsapp}</span>
             </div>
 
-            <div className="flex justify-between py-1.5 border-b border-white/5">
-              <span className="text-[#a1a8b9]">Cidade / UF</span>
-              <span className="text-[#f3f4f6]">{currentUser?.cidade_uf || 'Curitiba/PR'}</span>
-            </div>
+            {currentUser?.role !== 'admin' && currentUser?.cidade_uf && (
+              <div className="flex justify-between py-1.5 border-b border-white/5">
+                <span className="text-[#a1a8b9]">Cidade / UF</span>
+                <span className="text-[#f3f4f6]">{currentUser.cidade_uf}</span>
+              </div>
+            )}
 
             <div className="flex justify-between py-1.5 border-b border-white/5">
               <span className="text-[#a1a8b9]">Equipe</span>

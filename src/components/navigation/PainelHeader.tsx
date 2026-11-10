@@ -77,8 +77,8 @@ export function PainelHeader({ mobileMenuOpen, onToggleMobileMenu }: PainelHeade
               <div className="font-medium text-[#f3f4f6] leading-tight">
                 {currentUser?.nome || 'Selecionar Perfil'}
               </div>
-              <div className="text-xs text-[#a1a8b9] capitalize leading-tight">
-                {currentUser?.cidade_uf || 'Atleta'}
+              <div className="text-xs text-[#a1a8b9] leading-tight">
+                {currentUser?.role === 'admin' ? 'Administrador' : currentUser?.cidade_uf || 'Atleta'}
               </div>
             </div>
             <ChevronDown className="w-3.5 h-3.5 text-[#e5c158]" />
@@ -111,7 +111,7 @@ export function PainelHeader({ mobileMenuOpen, onToggleMobileMenu }: PainelHeade
                           currentUser?.id === p.id ? 'text-[#060a13]/80' : 'text-[#a1a8b9]'
                         }`}
                       >
-                        {p.cidade_uf}
+                        {p.role === 'admin' ? 'Administrador' : p.cidade_uf}
                       </div>
                     </div>
                     <span
