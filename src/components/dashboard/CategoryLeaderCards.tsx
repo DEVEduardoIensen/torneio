@@ -13,31 +13,31 @@ interface CategoryLeaderCardsProps {
 export function CategoryLeaderCards({ categoryRankings, formatFormula }: CategoryLeaderCardsProps) {
   return (
     <section className="space-y-4">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 sm:gap-2">
         <div>
-          <h2 className="text-lg font-heading font-bold text-[#f3f4f6]">
-            Líderes por Categoria ({categoryRankings.length} modalidades ativas)
+          <h2 className="text-base sm:text-lg font-bold text-[#f3f4f6]">
+            Líderes da Temporada
           </h2>
           <p className="text-xs text-[#a1a8b9]">
-            Cada categoria abaixo possui sua própria fórmula de pontuação e critério de desempate configuráveis no banco.
+            Primeiro colocado em cada modalidade oficial
           </p>
         </div>
         <Link
           href="/painel/ranking"
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#e5c158] hover:text-[#cfab44]"
+          className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#e5c158] hover:text-[#cfab44] self-start sm:self-auto"
         >
-          <span>Abrir tabela completa de classificação</span>
-          <ArrowRight className="w-4 h-4" />
+          <span>Classificação completa</span>
+          <ArrowRight className="w-3.5 h-3.5" />
         </Link>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
         {categoryRankings.map(({ categoria, entries }) => {
           const leader = entries[0];
           return (
             <div
               key={categoria.id}
-              className="bg-[#080c14] border border-white/10 hover:border-[#e5c158]/35 rounded-xl p-5 flex flex-col justify-between transition-colors"
+              className="bg-[#080c14] border border-white/10 hover:border-[#e5c158]/35 rounded-xl p-4 sm:p-5 flex flex-col justify-between transition-colors"
             >
               <div>
                 <div className="flex items-center justify-between gap-2 text-xs text-[#a1a8b9] mb-2">

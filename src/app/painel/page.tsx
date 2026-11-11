@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Bell, Fish, KeyRound, Trophy } from 'lucide-react';
+import { Bell, Compass, Fish, KeyRound, Trophy } from 'lucide-react';
 import { usePainel } from '@/components/PainelContext';
 import { CategoryLeaderCards } from '@/components/dashboard/CategoryLeaderCards';
 import { OverviewIndicators } from '@/components/dashboard/OverviewIndicators';
@@ -53,77 +53,78 @@ export default function PainelOverviewPage() {
   return (
     <div className="space-y-8">
       {/* Banner Principal da Temporada e Etapa em Andamento */}
-      <section className="bg-[#080c14] border border-[#e5c158]/25 rounded-xl p-6 sm:p-8 shadow-xl">
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
-          <div className="flex flex-col sm:flex-row sm:items-center gap-5">
+      <section className="bg-[#080c14] border border-[#e5c158]/25 rounded-2xl p-5 sm:p-7 shadow-xl">
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-4">
             <img
               src="/brand/logo_header.webp"
               alt={temporada.nome}
-              className="h-20 w-auto object-contain self-start sm:self-center shrink-0"
+              className="hidden sm:block h-16 w-auto object-contain self-start sm:self-center shrink-0"
             />
             <div>
               <div className="inline-flex items-center gap-2 text-xs font-semibold text-[#e5c158] mb-1">
-                <span>Temporada Oficial Ativa</span>
+                <span>Temporada Ativa</span>
                 <span>•</span>
                 <span className="tabular-nums">
                   {inscricoes.filter((i) => i.status_pagamento !== 'cancelado').length} competidores inscritos
                 </span>
               </div>
-              <h1 className="text-2xl sm:text-3xl font-bold text-[#f3f4f6] tracking-tight">
+              <h1 className="text-xl sm:text-3xl font-bold text-[#f3f4f6] tracking-tight">
                 {temporada.nome}
               </h1>
-              <p className="text-sm text-[#a1a8b9] mt-1 max-w-2xl">
-                {temporada.subtitulo} — {temporada.descricao}
+              <p className="text-xs sm:text-sm text-[#a1a8b9] mt-1 max-w-xl">
+                Troféu Eldorado & Mathias Iscas — Pesque & Solte Oficial
               </p>
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3 shrink-0">
+          <div className="grid grid-cols-2 gap-2.5 sm:flex sm:items-center sm:gap-3 shrink-0 w-full lg:w-auto">
             <Link
               href="/painel/registros"
-              className="inline-flex items-center gap-2 h-11 px-5 rounded-lg bg-[#e5c158] hover:bg-[#cfab44] text-[#060a13] font-bold text-sm transition-colors shadow-md cursor-pointer"
+              className="flex items-center justify-center gap-2 h-11 sm:h-12 px-4 rounded-xl bg-gradient-to-r from-[#e5c158] to-[#f3cb63] hover:from-[#d9b142] hover:to-[#e5c158] text-[#060a13] font-bold text-xs sm:text-sm shadow-lg shadow-[#e5c158]/10 active:scale-[0.98] transition-all cursor-pointer text-center"
             >
               <Fish className="w-4 h-4 shrink-0" />
-              <span>Registrar Nova Captura</span>
+              <span>Registrar Peixe</span>
             </Link>
             <Link
               href="/painel/ranking"
-              className="inline-flex items-center gap-2 h-11 px-4 rounded-lg bg-[#0d1626] hover:bg-[#121c2e] border border-[#e5c158]/30 hover:border-[#e5c158] text-[#f3f4f6] font-semibold text-sm transition-colors cursor-pointer"
+              className="flex items-center justify-center gap-2 h-11 sm:h-12 px-4 rounded-xl bg-[#0c1322] hover:bg-[#121c30] border border-[#e5c158]/40 hover:border-[#e5c158] text-[#f3f4f6] font-semibold text-xs sm:text-sm shadow-md active:scale-[0.98] transition-all cursor-pointer text-center"
             >
-              <Trophy className="w-4 h-4 text-[#e5c158]" />
-              <span>Ver Classificação</span>
+              <Trophy className="w-4 h-4 text-[#e5c158] shrink-0" />
+              <span>Ver Ranking</span>
             </Link>
           </div>
         </div>
 
         {etapaAtiva && (
-          <div className="mt-6 pt-5 border-t border-white/10 grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-            <div>
-              <span className="text-xs text-[#a1a8b9] block">Etapa Vigente</span>
-              <strong className="text-[#f3f4f6] font-semibold text-base">{etapaAtiva.titulo}</strong>
-              <span className="text-xs text-[#a1a8b9] block mt-0.5">{etapaAtiva.local_pesca}</span>
-            </div>
-            <div>
-              <span className="text-xs text-[#a1a8b9] block">
-                Palavra-Chave Obrigatória no Vídeo
-              </span>
-              <div className="inline-flex items-center gap-2 mt-0.5">
-                <KeyRound className="w-4 h-4 text-[#e5c158]" />
-                <strong className="font-mono text-base text-[#e5c158] tabular-nums font-bold">
-                  {etapaAtiva.revelar_palavra_chave ? etapaAtiva.palavra_chave : 'AGUARDANDO ABERTURA'}
-                </strong>
+          <div className="mt-5 pt-4 border-t border-white/10 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs sm:text-sm">
+            <div className="flex items-center gap-3 p-3 rounded-xl bg-white/[0.03] border border-white/5">
+              <div className="w-8 h-8 rounded-lg bg-[#e5c158]/10 text-[#e5c158] flex items-center justify-center shrink-0">
+                <Compass className="w-4 h-4" />
               </div>
-              <span className="text-xs text-[#a1a8b9] block mt-0.5">
-                Pronunciar de forma audível com o peixe na régua
-              </span>
+              <div className="min-w-0">
+                <span className="text-[11px] text-[#a1a8b9] block font-medium">Etapa Vigente</span>
+                <strong className="text-[#f3f4f6] font-semibold text-sm truncate block">
+                  {etapaAtiva.titulo}
+                </strong>
+                <span className="text-[11px] text-[#a1a8b9] block truncate">
+                  {etapaAtiva.local_pesca}
+                </span>
+              </div>
             </div>
-            <div>
-              <span className="text-xs text-[#a1a8b9] block">Benefício Competidor Inscrito</span>
-              <strong className="text-[#e5c158] font-semibold tabular-nums">
-                {temporada.beneficio_desconto_parceiros_pct}% de desconto à vista ou Pix
-              </strong>
-              <span className="text-xs text-[#a1a8b9] block mt-0.5">
-                Nas lojas e parceiros oficiais da temporada
+
+            <div className="flex items-center justify-between gap-3 p-3 rounded-xl bg-[#e5c158]/10 border border-[#e5c158]/25">
+              <div className="flex items-center gap-2.5 min-w-0">
+                <KeyRound className="w-4 h-4 text-[#e5c158] shrink-0" />
+                <div>
+                  <span className="text-[11px] text-[#e5c158]/80 block font-medium">Palavra-Chave no Vídeo</span>
+                  <strong className="font-mono text-base text-[#e5c158] tabular-nums font-bold tracking-wider">
+                    {etapaAtiva.revelar_palavra_chave ? etapaAtiva.palavra_chave : 'AGUARDANDO ABERTURA'}
+                  </strong>
+                </div>
+              </div>
+              <span className="text-[10px] text-[#a1a8b9] hidden sm:block text-right">
+                Pronunciar na régua
               </span>
             </div>
           </div>

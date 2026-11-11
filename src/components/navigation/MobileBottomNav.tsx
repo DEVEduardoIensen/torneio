@@ -37,7 +37,7 @@ export function MobileBottomNav() {
   const mainTabs = [
     {
       href: '/painel',
-      label: 'Visão Geral',
+      label: 'Início',
       icon: Compass,
       isActive: pathname === '/painel',
     },
@@ -49,7 +49,7 @@ export function MobileBottomNav() {
     },
     {
       href: '/painel/registros',
-      label: 'Enviar Peixe',
+      label: 'Enviar',
       icon: Fish,
       isSpecial: true,
       isActive: pathname.startsWith('/painel/registros'),
@@ -155,7 +155,7 @@ export function MobileBottomNav() {
                     <Icon className="w-5 h-5" />
                   </div>
                   <span
-                    className={`text-[10px] mt-0.5 font-bold truncate max-w-[60px] ${
+                    className={`text-[10px] mt-0.5 font-bold ${
                       tab.isActive ? 'text-[#e5c158]' : 'text-[#f3f4f6]'
                     }`}
                   >
@@ -176,7 +176,7 @@ export function MobileBottomNav() {
                 aria-label={tab.label}
               >
                 <Icon className="w-5 h-5 mb-0.5" />
-                <span className="text-[10px] font-medium truncate max-w-[60px]">
+                <span className="text-[10px] font-medium">
                   {tab.label}
                 </span>
                 {tab.isActive && (
@@ -343,3 +343,4 @@ export function MobileBottomNav() {
     </>
   );
 }
+

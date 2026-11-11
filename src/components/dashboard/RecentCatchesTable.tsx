@@ -12,24 +12,99 @@ interface RecentCatchesTableProps {
 export function RecentCatchesTable({ registros }: RecentCatchesTableProps) {
   return (
     <section className="space-y-4">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 sm:gap-2">
         <div>
-          <h2 className="text-lg font-heading font-bold text-[#f3f4f6]">
-            Últimos Registros de Captura Recebidos
+          <h2 className="text-base sm:text-lg font-bold text-[#f3f4f6]">
+            Últimas Capturas Enviadas
           </h2>
           <p className="text-xs text-[#a1a8b9]">
-            Histórico em tempo real de submissões com status de validação da Mesa de Arbitragem.
+            Acompanhe as validações da arbitragem em tempo real
           </p>
         </div>
         <Link
           href="/painel/registros"
-          className="text-xs font-semibold text-[#e5c158] hover:text-[#cfab44]"
+          className="text-xs font-semibold text-[#e5c158] hover:text-[#cfab44] self-start sm:self-auto"
         >
-          Enviar ou consultar minhas capturas
+          Minhas capturas →
         </Link>
       </div>
 
-      <div className="bg-[#080c14] border border-white/10 rounded-2xl overflow-hidden">
+      {/* Lista em Cards para Telas Mobile */}
+      <div className="md:hidden space-y-2.5">
+        {registros.slice(0, 6).map((reg) => {
+          const medidaExibida = reg.medida_aprovada ?? reg.medida_declarada;
+          return (
+            <div
+              key={reg.id}
+              className="bg-[#080c14] border border-white/10 rounded-xl p-3.5 space-y-2.5 transition-colors"
+            >
+              <div className="flex items-start justify-between gap-2">
+                <div>
+                  <Link
+                    href={`/painel/pescadores/${reg.pescador_id}`}
+                    className="font-semibold text-sm text-[#f3f4f6] hover:text-[#e5c158]"
+                  >
+                    {reg.pescador_nome}
+                  </Link>
+                  <span className="text-xs text-[#a1a8b9] block">
+                    {reg.pescador_cidade_uf}
+                  </span>
+                </div>
+
+                <div>
+                  {reg.status === 'aprovado' && (
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                      <CheckCircle2 className="w-3 h-3" />
+                      <span>Homologado</span>
+                    </span>
+                  )}
+                  {reg.status === 'pendente' && (
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-medium bg-zinc-800/80 text-zinc-300 border border-zinc-700/50">
+                      <Clock className="w-3 h-3" />
+                      <span>Em Análise</span>
+                    </span>
+                  )}
+                  {reg.status === 'reprovado' && (
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-medium bg-rose-500/10 text-rose-400 border border-rose-500/20">
+                      <span>Reprovado</span>
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between pt-1 border-t border-white/5">
+                <div>
+                  <div className="text-xs font-medium text-[#f3f4f6]">{reg.categoria_nome}</div>
+                  <div className="text-[11px] text-[#a1a8b9]">
+                    {reg.isca_marca ? `${reg.isca_marca} ${reg.isca_modelo || ''}` : reg.especie_informada}
+                  </div>
+                </div>
+
+                <div className="text-right">
+                  <div className="text-base font-bold text-[#e5c158] tabular-nums">
+                    {medidaExibida.toFixed(1)} {reg.categoria_unidade || 'cm'}
+                  </div>
+                  {reg.captura_completa_sem_corte && (
+                    <span className="text-[10px] text-[#e5c158]/80 block font-medium">
+                      Vídeo s/ corte
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              <div className="text-[11px] text-[#a1a8b9] pt-1 border-t border-white/5 flex items-center justify-between">
+                <span className="truncate max-w-[65%]">{reg.local_captura}</span>
+                <span className="font-mono text-[#e5c158]/80 text-[10px]">
+                  Chave: {reg.palavra_chave_informada}
+                </span>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Tabela Completa para Desktop / Tablet */}
+      <div className="hidden md:block bg-[#080c14] border border-white/10 rounded-2xl overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
