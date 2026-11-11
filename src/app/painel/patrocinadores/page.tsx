@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Award, MapPin, Phone, Sliders } from 'lucide-react';
+import { Award, MapPin, Percent, Phone, Sliders } from 'lucide-react';
 import { usePainel } from '@/components/PainelContext';
 
 export default function PainelPatrocinadoresPage() {
@@ -24,7 +24,7 @@ export default function PainelPatrocinadoresPage() {
             Patrocinadores Oficiais e Prêmios de Isca
           </h1>
           <p className="text-sm text-[#a1a8b9] mt-1">
-            Empresas que apoiam a pesca esportiva e oferecem {temporada.beneficio_desconto_parceiros_pct}% de desconto e premiações extras aos inscritos.
+            Empresas que apoiam a pesca esportiva e oferecem benefícios exclusivos aos inscritos.
           </p>
         </div>
 
@@ -38,6 +38,32 @@ export default function PainelPatrocinadoresPage() {
           </Link>
         )}
       </div>
+
+      {/* Destaque do Benefício de Desconto Pix (Realocado da Home para Valorizar os Parceiros) */}
+      <section className="bg-gradient-to-r from-[#0d1626] to-[#080c14] border border-[#e5c158]/35 rounded-2xl p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xl">
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 rounded-xl bg-[#e5c158]/15 border border-[#e5c158]/30 flex items-center justify-center shrink-0">
+            <Percent className="w-6 h-6 text-[#e5c158]" />
+          </div>
+          <div>
+            <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#e5c158] uppercase tracking-wider">
+              <span>Vantagem do Competidor Inscrito</span>
+            </div>
+            <h2 className="text-lg font-bold text-[#f3f4f6] mt-0.5">
+              {temporada.beneficio_desconto_parceiros_pct}% de Desconto à Vista ou no Pix
+            </h2>
+            <p className="text-xs sm:text-sm text-[#a1a8b9] mt-0.5">
+              Válido em todas as lojas parceiras e patrocinadores oficiais apresentando seu passaporte da temporada.
+            </p>
+          </div>
+        </div>
+        <Link
+          href="/painel/inscricoes"
+          className="inline-flex items-center justify-center h-10 px-4 rounded-xl bg-[#e5c158] hover:bg-[#cfab44] text-[#060a13] font-bold text-xs shrink-0 transition-colors shadow-md"
+        >
+          Ver meu passaporte
+        </Link>
+      </section>
 
       <section className="grid grid-cols-1 md:grid-cols-2 gap-5">
         {patrocinadores.map((pat) => (
