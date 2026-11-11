@@ -32,89 +32,57 @@ export default function AdminInscricoesPage() {
   };
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-heading font-bold text-[#f3f4f6] tracking-tight">
-          Controle Financeiro de Inscrições
-        </h1>
-        <p className="text-sm text-[#a1a8b9] mt-1">
-          Homologue pagamentos via Pix e gerencie a liberação do Passaporte do Competidor.
-        </p>
-      </div>
+    <div className="max-w-3xl">
+      <h1 className="text-2xl font-bold tracking-tight text-[#f3f4f6]">Inscrições</h1>
 
-      <div className="el-card overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="border-b border-white/10 bg-[#060a13] text-xs font-heading font-semibold text-[#a1a8b9]">
-                <th scope="col" className="py-3.5 px-4">Inscrição</th>
-                <th scope="col" className="py-3.5 px-4">Competidor</th>
-                <th scope="col" className="py-3.5 px-4">Modalidade</th>
-                <th scope="col" className="py-3.5 px-4">Status Atual</th>
-                <th scope="col" className="py-3.5 px-4 text-right">Ações Financeiras</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-white/10 text-sm">
-              {inscricoes.map((insc) => (
-                <tr key={insc.id} className="hover:bg-[#0c111c]">
-                  <td className="py-3.5 px-4 font-heading font-bold text-[#e5c158] tabular-nums">
-                    {insc.numero_inscricao}
-                  </td>
-                  <td className="py-3.5 px-4">
-                    <div className="font-semibold text-[#f3f4f6]">{insc.pescador_nome}</div>
-                    <div className="text-xs text-[#a1a8b9] tabular-nums">
-                      WhatsApp: {insc.pescador_whatsapp} • {insc.pescador_cidade_uf}
-                    </div>
-                  </td>
-                  <td className="py-3.5 px-4 capitalize text-[#f3f4f6]">
-                    {insc.modalidade_principal.replace('_', '/')}
-                  </td>
-                  <td className="py-3.5 px-4">
-                    {insc.status_pagamento === 'pago' && (
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                        Pago
-                      </span>
-                    )}
-                    {insc.status_pagamento === 'isento' && (
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium bg-[#060a13] text-[#e5c158] border border-[#e5c158]/40">
-                        Isento (Staff/Juiz)
-                      </span>
-                    )}
-                    {insc.status_pagamento === 'pendente' && (
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium bg-zinc-800 text-zinc-300 border border-zinc-700/50">
-                        Aguardando Pix
-                      </span>
-                    )}
-                    {insc.status_pagamento === 'cancelado' && (
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium bg-rose-500/10 text-rose-400 border border-rose-500/20">
-                        Cancelado
-                      </span>
-                    )}
-                  </td>
-                  <td className="py-3.5 px-4 text-right space-x-2">
-                    <button
-                      type="button"
-                      disabled={updatingId === insc.id}
-                      onClick={() => handleUpdateStatus(insc, 'pago')}
-                      className="el-btn-gold h-8 px-3.5 text-xs"
-                    >
-                      Confirmar Pago
-                    </button>
-                    <button
-                      type="button"
-                      disabled={updatingId === insc.id}
-                      onClick={() => handleUpdateStatus(insc, 'pendente')}
-                      className="el-btn-outline h-8 px-3.5 text-xs"
-                    >
-                      Marcar Pendente
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+      <ul className="mt-6 divide-y divide-white/10 border-y border-white/10">
+        {inscricoes.map((insc) => (
+          <li key={insc.id} className="py-4">
+            <div className="flex items-baseline justify-between gap-3">
+              <span className="text-base font-semibold text-[#f3f4f6]">{insc.pescador_nome}</span>
+              <span className="text-sm font-semibold tabular-nums text-[#e5c158]">
+                {insc.numero_inscricao}
+              </span>
+            </div>
+            <p className="mt-0.5 text-sm tabular-nums text-[#a1a8b9]">
+              {insc.pescador_whatsapp} · {insc.pescador_cidade_uf} ·{' '}
+              <span className="capitalize">{insc.modalidade_principal.replace('_', '/')}</span>
+            </p>
+            <p
+              className={`mt-1 text-sm font-medium ${
+                insc.status_pagamento === 'pago'
+                  ? 'text-emerald-400'
+                  : insc.status_pagamento === 'cancelado'
+                  ? 'text-rose-400'
+                  : 'text-[#a1a8b9]'
+              }`}
+            >
+              {insc.status_pagamento === 'pago' && 'Pago'}
+              {insc.status_pagamento === 'isento' && 'Isento (Staff/Juiz)'}
+              {insc.status_pagamento === 'pendente' && 'Aguardando Pix'}
+              {insc.status_pagamento === 'cancelado' && 'Cancelado'}
+            </p>
+            <div className="mt-3 flex flex-col gap-2 sm:flex-row">
+              <button
+                type="button"
+                disabled={updatingId === insc.id}
+                onClick={() => handleUpdateStatus(insc, 'pago')}
+                className="h-12 w-full cursor-pointer rounded-xl bg-[#e5c158] px-5 text-base font-bold text-[#060a13] transition-colors hover:bg-[#cfab44] disabled:opacity-60 sm:w-auto"
+              >
+                Confirmar pago
+              </button>
+              <button
+                type="button"
+                disabled={updatingId === insc.id}
+                onClick={() => handleUpdateStatus(insc, 'pendente')}
+                className="h-12 w-full cursor-pointer rounded-xl px-5 text-base font-semibold text-[#a1a8b9] transition-colors hover:text-[#f3f4f6] disabled:opacity-60 sm:w-auto"
+              >
+                Marcar pendente
+              </button>
+            </div>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

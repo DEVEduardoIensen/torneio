@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { ShieldAlert, ArrowLeft } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { usePainel } from '@/components/PainelContext';
 
 export default function AdminLayoutGuard({
@@ -15,7 +15,7 @@ export default function AdminLayoutGuard({
   if (loading) {
     return (
       <div className="py-16 text-center text-sm text-[#a1a8b9]">
-        Verificando permissões de acesso da comissão...
+        Verificando permissões...
       </div>
     );
   }
@@ -25,33 +25,23 @@ export default function AdminLayoutGuard({
 
   if (!canAccess) {
     return (
-      <div className="max-w-xl mx-auto my-12 bg-[#080c14] border border-[#e5c158]/30 rounded-2xl p-8 text-center space-y-5 shadow-2xl">
-        <div className="w-16 h-16 rounded-full bg-[#e5c158]/15 border border-[#e5c158]/30 flex items-center justify-center mx-auto">
-          <ShieldAlert className="w-8 h-8 text-[#e5c158]" />
-        </div>
-        <div>
-          <h1 className="text-xl font-heading font-bold text-[#f3f4f6]">
-            Área Restrita à Direção do Torneio
-          </h1>
-          <p className="text-sm text-[#a1a8b9] mt-2">
-            Você está conectado como <strong className="text-[#f3f4f6]">{currentUser?.nome || 'Competidor'}</strong> ({currentUser?.role || 'pescador'}).
-            Este módulo de homologação e gestão técnica é exclusivo para os administradores do torneio.
-          </p>
-        </div>
-
-        <div className="pt-2">
-          <Link
-            href="/painel"
-            className="inline-flex items-center justify-center gap-2 h-11 px-6 rounded-full bg-[#e5c158] hover:bg-[#cfab44] text-[#060a13] font-heading font-bold text-sm transition-colors cursor-pointer shadow-md"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            <span>Voltar para Minha Área de Competidor</span>
-          </Link>
-        </div>
+      <div className="max-w-xl">
+        <h1 className="text-2xl font-bold text-[#f3f4f6] tracking-tight">Acesso restrito</h1>
+        <p className="mt-2 text-base text-[#a1a8b9]">
+          Você está conectado como{' '}
+          <strong className="text-[#f3f4f6]">{currentUser?.nome || 'Competidor'}</strong> (
+          {currentUser?.role || 'pescador'}). Esta área é exclusiva para administradores.
+        </p>
+        <Link
+          href="/painel"
+          className="mt-4 inline-flex h-12 items-center gap-2 text-base font-semibold text-[#e5c158] hover:text-[#cfab44]"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          <span>Voltar ao painel</span>
+        </Link>
       </div>
     );
   }
 
   return <>{children}</>;
 }
-

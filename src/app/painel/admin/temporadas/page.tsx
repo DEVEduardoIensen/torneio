@@ -20,85 +20,74 @@ export default function AdminTemporadasPage() {
   };
 
   return (
-    <div className="space-y-8">
-      <div>
-        <h1 className="text-2xl font-heading font-bold text-[#f3f4f6] tracking-tight">
-          Motor de Configuração da Temporada e Categorias Dinâmicas
-        </h1>
-        <p className="text-sm text-[#a1a8b9] mt-1">
-          Crie ou altere espécies, modalidades, fórmulas matemáticas de ranking, medidas mínimas e itens do checklist de arbitragem sem precisar alterar uma única linha de código.
-        </p>
-      </div>
+    <div className="max-w-3xl space-y-10">
+      <h1 className="text-2xl font-bold tracking-tight text-[#f3f4f6]">Temporada e categorias</h1>
 
       {statusMsg && (
-        <div
-          role="status"
-          className="rounded-xl bg-emerald-950/90 border border-emerald-800 px-4 py-3 text-sm font-medium text-emerald-200"
-        >
+        <p role="status" className="text-sm font-medium text-emerald-300">
           {statusMsg}
-        </div>
+        </p>
       )}
 
-      {/* Configuração Geral da Temporada */}
       {temporada && (
         <TemporadaGeralForm
           temporada={temporada}
           onSaved={() => {
             refresh();
-            setStatusMsg('Parâmetros da temporada salvos com sucesso!');
+            setStatusMsg('Temporada salva.');
           }}
         />
       )}
 
-      {/* Construtor de Categorias Dinâmicas */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
-        <div className="el-card overflow-hidden">
-          <div className="p-4 border-b border-white/10 flex items-center justify-between bg-[#060a13]">
-            <span className="text-xs font-heading font-semibold text-[#e5c158]">
-              Categorias Cadastradas ({categorias.length})
-            </span>
-            <button
-              type="button"
-              onClick={() => setSelectedCat(null)}
-              className="el-btn-gold h-8 px-3.5 text-xs"
-            >
-              Nova Categoria
-            </button>
-          </div>
-
-          <div className="divide-y divide-white/10">
-            {categorias.map((cat) => (
-              <div
-                key={cat.id}
-                className={`p-4 flex items-center justify-between gap-2 ${
-                  selectedCat?.id === cat.id ? 'bg-[#0c111c] border-l-2 border-[#e5c158]' : 'hover:bg-[#0c111c]/60'
-                }`}
-              >
-                <button
-                  type="button"
-                  onClick={() => setSelectedCat(cat)}
-                  className="text-left flex-1 cursor-pointer"
-                >
-                  <div className="text-sm font-heading font-bold text-[#f3f4f6]">{cat.nome}</div>
-                  <div className="text-xs text-[#a1a8b9] mt-0.5 tabular-nums">
-                    {cat.especie} • Fórmula: {cat.formula_ranking} ({cat.top_n_peixes}) • Mín.{' '}
-                    {cat.medida_minima} {cat.unidade_medida}
-                  </div>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleDeleteCategoria(cat.id)}
-                  className="px-2.5 py-1 rounded-full text-xs font-semibold text-red-300 hover:bg-red-950 cursor-pointer"
-                >
-                  Excluir
-                </button>
-              </div>
-            ))}
-          </div>
+      <section aria-labelledby="categorias-title" className="border-t border-white/10 pt-8">
+        <div className="flex items-center justify-between gap-3">
+          <h2 id="categorias-title" className="text-lg font-bold text-[#f3f4f6]">
+            Categorias ({categorias.length})
+          </h2>
+          <button
+            type="button"
+            onClick={() => setSelectedCat(null)}
+            className="inline-flex h-12 cursor-pointer items-center px-1 text-base font-semibold text-[#e5c158] hover:text-[#cfab44]"
+          >
+            Nova categoria
+          </button>
         </div>
 
-        {/* Editor Paramétrico da Categoria Selecionada */}
-        {temporada && (
+        <ul className="mt-3 divide-y divide-white/10 border-y border-white/10">
+          {categorias.map((cat) => (
+            <li key={cat.id} className="flex items-center justify-between gap-2 py-1">
+              <button
+                type="button"
+                onClick={() => setSelectedCat(cat)}
+                aria-current={selectedCat?.id === cat.id}
+                className="min-h-12 flex-1 cursor-pointer py-2 text-left"
+              >
+                <span
+                  className={`block text-base font-semibold ${
+                    selectedCat?.id === cat.id ? 'text-[#e5c158]' : 'text-[#f3f4f6]'
+                  }`}
+                >
+                  {cat.nome}
+                </span>
+                <span className="mt-0.5 block text-sm text-[#a1a8b9] tabular-nums">
+                  {cat.especie} · {cat.formula_ranking} ({cat.top_n_peixes}) · mín.{' '}
+                  {cat.medida_minima} {cat.unidade_medida}
+                </span>
+              </button>
+              <button
+                type="button"
+                onClick={() => handleDeleteCategoria(cat.id)}
+                className="h-12 shrink-0 cursor-pointer px-3 text-sm font-semibold text-red-300 hover:text-red-200"
+              >
+                Excluir
+              </button>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      {temporada && (
+        <section className="border-t border-white/10 pt-8">
           <CategoriaConfigForm
             key={selectedCat ? selectedCat.id : 'nova'}
             temporadaId={temporada.id}
@@ -108,8 +97,8 @@ export default function AdminTemporadasPage() {
               setStatusMsg(msg);
             }}
           />
-        )}
-      </div>
+        </section>
+      )}
     </div>
   );
 }

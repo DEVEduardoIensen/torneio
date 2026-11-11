@@ -63,7 +63,7 @@ export function PainelSidebar({ onCloseMobile }: PainelSidebarProps) {
   };
 
   return (
-    <div className="flex flex-col h-full bg-[#080c14] border-r border-[#e5c158]/20">
+    <div className="flex flex-col h-full bg-[#080c14] border-r border-white/10">
       {/* Topo da Sidebar com Logo Oficial */}
       <div className="p-5 border-b border-white/10 flex items-center gap-3.5">
         <img
@@ -84,7 +84,7 @@ export function PainelSidebar({ onCloseMobile }: PainelSidebarProps) {
       {/* Links de Navegação */}
       <div className="flex-1 overflow-y-auto px-3 py-4 space-y-6">
         <div>
-          <div className="px-3 mb-2 text-xs font-semibold uppercase tracking-wider text-[#a1a8b9]">
+          <div className="px-3 mb-2 text-sm font-semibold text-[#a1a8b9]">
             Área do Competidor
           </div>
           <nav className="space-y-1">
@@ -96,13 +96,13 @@ export function PainelSidebar({ onCloseMobile }: PainelSidebarProps) {
                   key={item.href}
                   href={item.href}
                   onClick={onCloseMobile}
-                  className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${
+                  className={`flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium transition-colors ${
                     active
-                      ? 'bg-[#e5c158] text-[#060a13] font-bold shadow-sm'
+                      ? 'bg-white/[0.06] text-[#e5c158] font-semibold'
                       : 'text-[#a1a8b9] hover:bg-white/5 hover:text-[#f3f4f6]'
                   }`}
                 >
-                  <Icon className={`w-4 h-4 shrink-0 ${active ? 'text-[#060a13]' : 'text-[#e5c158]'}`} />
+                  <Icon className={`w-4 h-4 shrink-0 ${active ? 'text-[#e5c158]' : 'text-[#a1a8b9]'}`} />
                   <span>{item.label}</span>
                 </Link>
               );
@@ -112,11 +112,8 @@ export function PainelSidebar({ onCloseMobile }: PainelSidebarProps) {
 
         {isAdmin && navAdmin.length > 0 && (
           <div>
-            <div className="px-3 mb-2 text-xs font-semibold uppercase tracking-wider text-[#a1a8b9] flex items-center justify-between">
+            <div className="px-3 mb-2 text-sm font-semibold text-[#a1a8b9]">
               <span>Direção do Torneio</span>
-              <span className="text-xs font-mono text-[#e5c158] uppercase font-bold">
-                {currentUser?.role}
-              </span>
             </div>
             <nav className="space-y-1">
               {navAdmin.map((item) => {
@@ -127,24 +124,18 @@ export function PainelSidebar({ onCloseMobile }: PainelSidebarProps) {
                     key={item.href}
                     href={item.href}
                     onClick={onCloseMobile}
-                    className={`flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${
+                    className={`flex items-center justify-between px-3 py-3 rounded-xl text-sm font-medium transition-colors ${
                       active
-                        ? 'bg-[#e5c158] text-[#060a13] font-bold shadow-sm'
+                        ? 'bg-white/[0.06] text-[#e5c158] font-semibold'
                         : 'text-[#a1a8b9] hover:bg-white/5 hover:text-[#f3f4f6]'
                     }`}
                   >
                     <span className="flex items-center gap-3 truncate">
-                      <Icon className={`w-4 h-4 shrink-0 ${active ? 'text-[#060a13]' : 'text-[#e5c158]'}`} />
+                      <Icon className={`w-4 h-4 shrink-0 ${active ? 'text-[#e5c158]' : 'text-[#a1a8b9]'}`} />
                       <span className="truncate">{item.label}</span>
                     </span>
                     {item.badge && (
-                      <span
-                        className={`ml-2 px-2 py-0.5 rounded-md text-xs font-bold tabular-nums ${
-                          active
-                            ? 'bg-[#060a13] text-[#e5c158]'
-                            : 'bg-[#e5c158]/15 text-[#e5c158] border border-[#e5c158]/30'
-                        }`}
-                      >
+                      <span className="ml-2 text-sm font-bold tabular-nums text-[#e5c158]">
                         {item.badge}
                       </span>
                     )}

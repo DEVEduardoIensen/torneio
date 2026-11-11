@@ -4,6 +4,15 @@ import React, { useState } from 'react';
 import { usePainel } from '@/components/PainelContext';
 import { Etapa } from '@/types/domain';
 
+const inputClass =
+  'h-12 w-full rounded-xl border border-white/15 bg-transparent px-3.5 text-base text-[#f3f4f6] placeholder:text-[#a1a8b9]/60 focus:border-[#e5c158] focus:outline-none';
+const labelClass = 'mb-1.5 block text-sm font-medium text-[#f3f4f6]';
+
+function statusColor(status: Etapa['status']) {
+  if (status === 'em_andamento' || status === 'inscricoes_abertas') return 'text-emerald-400';
+  return 'text-[#a1a8b9]';
+}
+
 export default function AdminEtapasPage() {
   const { temporada, etapas, refresh } = usePainel();
   const initial = etapas[0];
@@ -89,221 +98,210 @@ export default function AdminEtapasPage() {
   };
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-heading font-bold text-[#f3f4f6] tracking-tight">
-          Gestão de Etapas e Palavra-Chave Oficial
-        </h1>
-        <p className="text-sm text-[#a1a8b9] mt-1">
-          Configure as fases da temporada, locais de pesca e altere ou revele a palavra-chave exigida nos vídeos.
-        </p>
+    <div className="max-w-3xl">
+      <div className="flex items-center justify-between gap-3">
+        <h1 className="text-2xl font-bold text-[#f3f4f6] tracking-tight">Etapas</h1>
+        <button
+          type="button"
+          onClick={() => selectEtapa(null)}
+          className="h-12 px-2 text-base font-semibold text-[#e5c158] hover:text-[#cfab44] cursor-pointer"
+        >
+          Nova etapa
+        </button>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
-        <div className="el-card overflow-hidden">
-          <div className="p-4 border-b border-white/10 flex items-center justify-between bg-[#060a13]">
-            <span className="text-xs font-heading font-semibold text-[#e5c158]">
-              Etapas da Temporada ({etapas.length})
-            </span>
+      <ul className="mt-3 divide-y divide-white/10 border-y border-white/10">
+        {etapas.map((et) => (
+          <li key={et.id} className="flex items-center justify-between gap-2">
             <button
               type="button"
-              onClick={() => selectEtapa(null)}
-              className="el-btn-gold h-8 px-3.5 text-xs"
+              onClick={() => selectEtapa(et)}
+              aria-current={editingId === et.id}
+              className="min-h-14 flex-1 py-2 text-left cursor-pointer"
             >
-              Nova Etapa
-            </button>
-          </div>
-
-          <div className="divide-y divide-white/10">
-            {etapas.map((et) => (
-              <div
-                key={et.id}
-                className={`p-4 flex items-center justify-between gap-2 ${
-                  editingId === et.id ? 'bg-[#0c111c] border-l-2 border-[#e5c158]' : 'hover:bg-[#0c111c]/60'
+              <span
+                className={`block text-base font-semibold ${
+                  editingId === et.id ? 'text-[#e5c158]' : 'text-[#f3f4f6]'
                 }`}
               >
-                <button
-                  type="button"
-                  onClick={() => selectEtapa(et)}
-                  className="text-left flex-1 cursor-pointer"
-                >
-                  <div className="text-sm font-heading font-bold text-[#f3f4f6]">{et.titulo}</div>
-                  <div className="text-xs text-[#e5c158] font-medium mt-0.5">
-                    Chave: {et.palavra_chave} ({et.status.replace('_', ' ')})
-                  </div>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleDelete(et.id)}
-                  className="px-2.5 py-1 rounded-full text-xs font-semibold text-red-300 hover:bg-red-950 cursor-pointer"
-                >
-                  Excluir
-                </button>
-              </div>
-            ))}
-          </div>
-        </div>
+                {et.titulo}
+              </span>
+              <span className="block text-sm text-[#a1a8b9]">
+                <span className={`capitalize ${statusColor(et.status)}`}>
+                  {et.status.replace(/_/g, ' ')}
+                </span>{' '}
+                · {et.palavra_chave}
+              </span>
+            </button>
+            <button
+              type="button"
+              onClick={() => handleDelete(et.id)}
+              className="h-12 px-2 text-sm font-semibold text-rose-400 hover:text-rose-300 cursor-pointer"
+            >
+              Excluir
+            </button>
+          </li>
+        ))}
+      </ul>
 
-        <form
-          onSubmit={handleSave}
-          className="lg:col-span-2 el-card-gold p-6 space-y-4"
-        >
-          <h2 className="text-lg font-heading font-bold text-[#f3f4f6] border-b border-white/10 pb-3">
-            {editingId === 'nova' ? 'Cadastrar Nova Etapa' : `Editar Etapa: ${titulo}`}
-          </h2>
+      <form
+        onSubmit={handleSave}
+        className="mt-8 max-w-xl space-y-5 border-t border-white/10 pt-6"
+      >
+        <h2 className="text-lg font-bold text-[#f3f4f6]">
+          {editingId === 'nova' ? 'Nova etapa' : `Editar: ${titulo}`}
+        </h2>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div>
-              <label htmlFor="et-num" className="block text-xs font-semibold text-[#f3f4f6] mb-1.5">
-                Nº da Etapa
-              </label>
-              <input
-                id="et-num"
-                type="number"
-                value={numero}
-                onChange={(e) => setNumero(Number(e.target.value))}
-                className="w-full h-11 px-4 rounded-xl bg-[#060a13] border border-white/15 text-sm text-[#f3f4f6] tabular-nums"
-              />
-            </div>
-
-            <div className="sm:col-span-2">
-              <label htmlFor="et-tit" className="block text-xs font-semibold text-[#f3f4f6] mb-1.5">
-                Título Oficial da Etapa
-              </label>
-              <input
-                id="et-tit"
-                type="text"
-                required
-                value={titulo}
-                onChange={(e) => setTitulo(e.target.value)}
-                className="w-full h-11 px-4 rounded-xl bg-[#060a13] border border-white/15 text-sm text-[#f3f4f6]"
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label htmlFor="et-loc" className="block text-xs font-semibold text-[#f3f4f6] mb-1.5">
-                Local de Pesca / Bacia Hidrográfica
-              </label>
-              <input
-                id="et-loc"
-                type="text"
-                required
-                value={localPesca}
-                onChange={(e) => setLocalPesca(e.target.value)}
-                className="w-full h-11 px-4 rounded-xl bg-[#060a13] border border-white/15 text-sm text-[#f3f4f6]"
-              />
-            </div>
-
-            <div>
-              <label htmlFor="et-cid" className="block text-xs font-semibold text-[#f3f4f6] mb-1.5">
-                Cidade / Região
-              </label>
-              <input
-                id="et-cid"
-                type="text"
-                value={cidadeUf}
-                onChange={(e) => setCidadeUf(e.target.value)}
-                className="w-full h-11 px-4 rounded-xl bg-[#060a13] border border-white/15 text-sm text-[#f3f4f6]"
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div>
-              <label htmlFor="et-ini" className="block text-xs font-semibold text-[#f3f4f6] mb-1.5">
-                Data Início
-              </label>
-              <input
-                id="et-ini"
-                type="date"
-                value={dataInicio}
-                onChange={(e) => setDataInicio(e.target.value)}
-                className="w-full h-11 px-3.5 rounded-xl bg-[#060a13] border border-white/15 text-sm text-[#f3f4f6] tabular-nums"
-              />
-            </div>
-
-            <div>
-              <label htmlFor="et-fim" className="block text-xs font-semibold text-[#f3f4f6] mb-1.5">
-                Data Término
-              </label>
-              <input
-                id="et-fim"
-                type="date"
-                value={dataFim}
-                onChange={(e) => setDataFim(e.target.value)}
-                className="w-full h-11 px-3.5 rounded-xl bg-[#060a13] border border-white/15 text-sm text-[#f3f4f6] tabular-nums"
-              />
-            </div>
-
-            <div>
-              <label htmlFor="et-st" className="block text-xs font-semibold text-[#f3f4f6] mb-1.5">
-                Status Operacional
-              </label>
-              <select
-                id="et-st"
-                value={status}
-                onChange={(e) => setStatus(e.target.value as Etapa['status'])}
-                className="w-full h-11 px-3.5 rounded-xl bg-[#060a13] border border-white/15 text-sm text-[#f3f4f6]"
-              >
-                <option value="agendada">Agendada</option>
-                <option value="inscricoes_abertas">Inscrições Abertas</option>
-                <option value="em_andamento">Em Andamento (Ativa)</option>
-                <option value="apuracao">Em Apuração</option>
-                <option value="encerrada">Encerrada</option>
-              </select>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center pt-2 border-t border-white/10">
-            <div>
-              <label htmlFor="et-key" className="block text-xs font-semibold text-[#e5c158] mb-1.5">
-                Palavra-Chave Oficial (Obrigatória no Vídeo)
-              </label>
-              <input
-                id="et-key"
-                type="text"
-                required
-                value={palavraChave}
-                onChange={(e) => setPalavraChave(e.target.value.toUpperCase())}
-                className="w-full h-11 px-4 rounded-xl bg-[#060a13] border border-white/15 text-sm font-heading font-bold text-[#e5c158]"
-              />
-            </div>
-
-            <label className="flex items-center gap-2.5 text-xs text-[#f3f4f6] pt-4 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={revelar}
-                onChange={(e) => setRevelar(e.target.checked)}
-                className="h-4 w-4 rounded border-white/25 bg-[#060a13] text-[#e5c158]"
-              />
-              <span>Revelar palavra-chave publicamente aos competidores</span>
-            </label>
-          </div>
-
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
           <div>
-            <label htmlFor="et-obs" className="block text-xs font-semibold text-[#f3f4f6] mb-1.5">
-              Observações da Etapa
+            <label htmlFor="et-num" className={labelClass}>
+              Número
             </label>
             <input
-              id="et-obs"
-              type="text"
-              value={observacoes}
-              onChange={(e) => setObservacoes(e.target.value)}
-              className="w-full h-11 px-4 rounded-xl bg-[#060a13] border border-white/15 text-sm text-[#f3f4f6]"
+              id="et-num"
+              type="number"
+              inputMode="numeric"
+              value={numero}
+              onChange={(e) => setNumero(Number(e.target.value))}
+              className={`${inputClass} tabular-nums`}
             />
           </div>
 
-          <button
-            type="submit"
-            disabled={saving}
-            className="el-btn-gold h-11 px-6 text-sm"
+          <div className="sm:col-span-2">
+            <label htmlFor="et-tit" className={labelClass}>
+              Título
+            </label>
+            <input
+              id="et-tit"
+              type="text"
+              required
+              value={titulo}
+              onChange={(e) => setTitulo(e.target.value)}
+              className={inputClass}
+            />
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+          <div>
+            <label htmlFor="et-loc" className={labelClass}>
+              Local de pesca
+            </label>
+            <input
+              id="et-loc"
+              type="text"
+              required
+              value={localPesca}
+              onChange={(e) => setLocalPesca(e.target.value)}
+              className={inputClass}
+            />
+          </div>
+
+          <div>
+            <label htmlFor="et-cid" className={labelClass}>
+              Cidade / UF
+            </label>
+            <input
+              id="et-cid"
+              type="text"
+              value={cidadeUf}
+              onChange={(e) => setCidadeUf(e.target.value)}
+              className={inputClass}
+            />
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+          <div>
+            <label htmlFor="et-ini" className={labelClass}>
+              Início
+            </label>
+            <input
+              id="et-ini"
+              type="date"
+              value={dataInicio}
+              onChange={(e) => setDataInicio(e.target.value)}
+              className={`${inputClass} tabular-nums`}
+            />
+          </div>
+
+          <div>
+            <label htmlFor="et-fim" className={labelClass}>
+              Término
+            </label>
+            <input
+              id="et-fim"
+              type="date"
+              value={dataFim}
+              onChange={(e) => setDataFim(e.target.value)}
+              className={`${inputClass} tabular-nums`}
+            />
+          </div>
+        </div>
+
+        <div>
+          <label htmlFor="et-st" className={labelClass}>
+            Status
+          </label>
+          <select
+            id="et-st"
+            value={status}
+            onChange={(e) => setStatus(e.target.value as Etapa['status'])}
+            className={`${inputClass} cursor-pointer`}
           >
-            {saving ? 'Salvando...' : 'Salvar Etapa e Palavra-Chave'}
-          </button>
-        </form>
-      </div>
+            <option value="agendada">Agendada</option>
+            <option value="inscricoes_abertas">Inscrições abertas</option>
+            <option value="em_andamento">Em andamento</option>
+            <option value="apuracao">Em apuração</option>
+            <option value="encerrada">Encerrada</option>
+          </select>
+        </div>
+
+        <div>
+          <label htmlFor="et-key" className={labelClass}>
+            Palavra-chave do vídeo
+          </label>
+          <input
+            id="et-key"
+            type="text"
+            required
+            value={palavraChave}
+            onChange={(e) => setPalavraChave(e.target.value.toUpperCase())}
+            className={`${inputClass} font-bold tracking-wide text-[#e5c158]`}
+          />
+        </div>
+
+        <label className="flex min-h-11 cursor-pointer items-start gap-3">
+          <input
+            type="checkbox"
+            checked={revelar}
+            onChange={(e) => setRevelar(e.target.checked)}
+            className="mt-0.5 h-5 w-5 shrink-0 accent-[#e5c158]"
+          />
+          <span className="text-base text-[#f3f4f6]">Mostrar a palavra-chave aos competidores</span>
+        </label>
+
+        <div>
+          <label htmlFor="et-obs" className={labelClass}>
+            Observações
+          </label>
+          <input
+            id="et-obs"
+            type="text"
+            value={observacoes}
+            onChange={(e) => setObservacoes(e.target.value)}
+            className={inputClass}
+          />
+        </div>
+
+        <button
+          type="submit"
+          disabled={saving}
+          className="flex h-12 w-full cursor-pointer items-center justify-center rounded-xl bg-[#e5c158] text-base font-bold text-[#060a13] transition-colors hover:bg-[#cfab44] disabled:opacity-60"
+        >
+          {saving ? 'Salvando...' : 'Salvar etapa'}
+        </button>
+      </form>
     </div>
   );
 }

@@ -8,15 +8,7 @@ import { RegistroEnvioForm } from '@/components/registros/RegistroEnvioForm';
 import { Categoria } from '@/types/domain';
 
 export default function PainelRegistrosPage() {
-  const {
-    temporada,
-    etapaAtiva,
-    categorias,
-    etapas,
-    registros,
-    currentUser,
-    refresh,
-  } = usePainel();
+  const { etapaAtiva, categorias, etapas, registros, currentUser, refresh } = usePainel();
 
   const activeCategories = categorias.filter((c) => c.ativa);
   const [selectedCategoria, setSelectedCategoria] = useState<Categoria | null>(
@@ -26,20 +18,14 @@ export default function PainelRegistrosPage() {
   const meusRegistros = registros.filter((r) => r.pescador_id === currentUser?.id);
 
   return (
-    <div className="space-y-8">
-      <div>
-        <h1 className="text-2xl font-heading font-bold text-[#f3f4f6] tracking-tight">
-          Registro Oficial de Captura e Soltura
-        </h1>
-        <p className="text-sm text-[#a1a8b9] mt-1">
-          Submeta a foto na régua e o vídeo sem cortes para validação pela comissão de arbitragem.
-          {temporada?.permite_mesmo_peixe_multiplas_categorias
-            ? ' O regulamento ativo permite registrar o mesmo exemplar em múltiplas categorias compatíveis.'
-            : ''}
-        </p>
-      </div>
+    <div className="max-w-xl">
+      <h1 className="text-2xl font-bold tracking-tight text-[#f3f4f6]">Enviar captura</h1>
+      <p className="mt-1 text-sm text-[#a1a8b9]">
+        Foto da isca e vídeo sem cortes na régua, para a arbitragem validar.
+      </p>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+      <div className="mt-4">
+        {selectedCategoria && <CategoriaChecklistCard categoria={selectedCategoria} />}
         <RegistroEnvioForm
           currentUser={currentUser}
           activeCategories={activeCategories}
@@ -48,14 +34,11 @@ export default function PainelRegistrosPage() {
           onSubmitted={refresh}
           onSelectedCategoriaChange={setSelectedCategoria}
         />
-
-        {selectedCategoria && <CategoriaChecklistCard categoria={selectedCategoria} />}
       </div>
 
-      <MeusRegistrosTable
-        registros={meusRegistros}
-        currentUserName={currentUser?.nome}
-      />
+      <div className="mt-10">
+        <MeusRegistrosTable registros={meusRegistros} currentUserName={currentUser?.nome} />
+      </div>
     </div>
   );
 }

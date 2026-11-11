@@ -223,118 +223,86 @@ export function MobileBottomNav() {
           />
 
           {/* Conteúdo do Sheet Inferior */}
-          <div className="relative bg-[#080c14] border-t border-white/15 rounded-t-2xl p-5 max-h-[80vh] overflow-y-auto space-y-5 shadow-2xl z-10 animate-in slide-in-from-bottom duration-200">
+          <div className="relative bg-[#080c14] border-t border-white/15 rounded-t-2xl p-5 max-h-[80vh] overflow-y-auto space-y-4 shadow-2xl z-10">
             {/* Cabeçalho do Sheet */}
             <div className="flex items-center justify-between pb-3 border-b border-white/10">
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-semibold text-[#f3f4f6]">Outras Seções</span>
-                <span className="text-xs text-[#a1a8b9]">• Menu Completo</span>
-              </div>
+              <span className="text-base font-bold text-[#f3f4f6]">Mais opções</span>
               <button
                 type="button"
                 onClick={() => setMoreOpen(false)}
-                className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-[#a1a8b9] hover:text-[#f3f4f6] transition-colors cursor-pointer"
+                className="p-2 text-[#a1a8b9] hover:text-[#f3f4f6] transition-colors cursor-pointer"
                 aria-label="Fechar menu"
               >
-                <X className="w-4 h-4" />
+                <X className="w-5 h-5" />
               </button>
             </div>
 
             {/* Links Secundários do Competidor */}
-            <div className="space-y-1">
-              <div className="px-1 text-[11px] font-semibold uppercase tracking-wider text-[#a1a8b9] mb-2">
-                Competição e Benefícios
-              </div>
-              {secondaryLinks.map((item) => {
-                const Icon = item.icon;
-                const active = pathname.startsWith(item.href);
-                return (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    onClick={() => setMoreOpen(false)}
-                    className={`flex items-center gap-3.5 p-3 rounded-xl transition-colors ${
-                      active
-                        ? 'bg-[#e5c158] text-[#060a13]'
-                        : 'bg-[#060a13] hover:bg-white/5 text-[#f3f4f6] border border-white/5'
-                    }`}
-                  >
-                    <div
-                      className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 ${
-                        active ? 'bg-[#060a13] text-[#e5c158]' : 'bg-white/5 text-[#e5c158]'
-                      }`}
-                    >
-                      <Icon className="w-4 h-4" />
-                    </div>
-                    <div className="min-w-0">
-                      <div className="text-sm font-medium leading-tight">{item.label}</div>
-                      <div
-                        className={`text-xs mt-0.5 truncate ${
-                          active ? 'text-[#060a13]/80' : 'text-[#a1a8b9]'
+            <div>
+              <p className="text-xs font-medium text-[#a1a8b9] mb-1">
+                Geral
+              </p>
+              <ul className="divide-y divide-white/10 border-y border-white/10">
+                {secondaryLinks.map((item) => {
+                  const Icon = item.icon;
+                  const active = pathname.startsWith(item.href);
+                  return (
+                    <li key={item.href}>
+                      <Link
+                        href={item.href}
+                        onClick={() => setMoreOpen(false)}
+                        className={`flex items-center gap-3 py-3 transition-colors ${
+                          active ? 'text-[#e5c158]' : 'text-[#f3f4f6] hover:text-[#e5c158]'
                         }`}
                       >
-                        {item.desc}
-                      </div>
-                    </div>
-                  </Link>
-                );
-              })}
+                        <Icon className="w-5 h-5 shrink-0 text-[#e5c158]" />
+                        <div className="min-w-0">
+                          <div className="text-base font-semibold leading-tight">{item.label}</div>
+                          <div className="text-sm text-[#a1a8b9] truncate">{item.desc}</div>
+                        </div>
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
             </div>
 
             {/* Links de Gestão para Administrador */}
             {isAdmin && adminLinks.length > 0 && (
-              <div className="space-y-1 pt-3 border-t border-white/10">
-                <div className="px-1 text-[11px] font-semibold uppercase tracking-wider text-[#e5c158] mb-2 flex items-center justify-between">
-                  <span>Direção do Torneio</span>
-                  <span className="font-mono text-[10px] uppercase">Staff</span>
-                </div>
-                {adminLinks.map((item) => {
-                  const Icon = item.icon;
-                  const active = pathname.startsWith(item.href);
-                  return (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      onClick={() => setMoreOpen(false)}
-                      className={`flex items-center justify-between p-3 rounded-xl transition-colors ${
-                        active
-                          ? 'bg-[#e5c158] text-[#060a13]'
-                          : 'bg-[#060a13] hover:bg-white/5 text-[#f3f4f6] border border-white/5'
-                      }`}
-                    >
-                      <div className="flex items-center gap-3.5 min-w-0">
-                        <div
-                          className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 ${
-                            active ? 'bg-[#060a13] text-[#e5c158]' : 'bg-white/5 text-[#e5c158]'
+              <div className="pt-2">
+                <p className="text-xs font-medium text-[#a1a8b9] mb-1">
+                  Administração
+                </p>
+                <ul className="divide-y divide-white/10 border-y border-white/10">
+                  {adminLinks.map((item) => {
+                    const Icon = item.icon;
+                    const active = pathname.startsWith(item.href);
+                    return (
+                      <li key={item.href}>
+                        <Link
+                          href={item.href}
+                          onClick={() => setMoreOpen(false)}
+                          className={`flex items-center justify-between py-3 transition-colors ${
+                            active ? 'text-[#e5c158]' : 'text-[#f3f4f6] hover:text-[#e5c158]'
                           }`}
                         >
-                          <Icon className="w-4 h-4" />
-                        </div>
-                        <div className="min-w-0">
-                          <div className="text-sm font-medium leading-tight">{item.label}</div>
-                          <div
-                            className={`text-xs mt-0.5 truncate ${
-                              active ? 'text-[#060a13]/80' : 'text-[#a1a8b9]'
-                            }`}
-                          >
-                            {item.desc}
+                          <div className="flex items-center gap-3 min-w-0">
+                            <Icon className="w-5 h-5 shrink-0 text-[#e5c158]" />
+                            <div className="min-w-0">
+                              <div className="text-base font-semibold leading-tight">{item.label}</div>
+                              <div className="text-sm text-[#a1a8b9] truncate">{item.desc}</div>
+                            </div>
                           </div>
-                        </div>
-                      </div>
-                      {item.badge && (
-                        <span
-                          className={`ml-2 px-2 py-0.5 rounded-md text-xs font-bold tabular-nums ${
-                            active
-                              ? 'bg-[#060a13] text-[#e5c158]'
-                              : 'bg-[#e5c158]/15 text-[#e5c158] border border-[#e5c158]/30'
-                          }`}
-                        >
-                          {item.badge}
-                        </span>
-                      )}
-                    </Link>
-                  );
-                })}
+                          {item.badge && (
+                            <span className="ml-2 px-2 py-0.5 rounded text-xs font-bold tabular-nums bg-[#e5c158] text-[#060a13]">
+                              {item.badge}
+                            </span>
+                          )}
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
               </div>
             )}
           </div>

@@ -4,6 +4,10 @@ import React, { useState } from 'react';
 import { usePainel } from '@/components/PainelContext';
 import { Patrocinador } from '@/types/domain';
 
+const inputClass =
+  'h-12 w-full rounded-xl border border-white/15 bg-transparent px-3.5 text-base text-[#f3f4f6] placeholder:text-[#a1a8b9]/60 focus:border-[#e5c158] focus:outline-none';
+const labelClass = 'mb-1.5 block text-sm font-medium text-[#f3f4f6]';
+
 export default function AdminPatrocinadoresPage() {
   const { temporada, patrocinadores, refresh } = usePainel();
   const initial = patrocinadores[0];
@@ -79,165 +83,150 @@ export default function AdminPatrocinadoresPage() {
   };
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-heading font-bold text-[#f3f4f6] tracking-tight">
-          Gestão de Patrocinadores, Descontos e Prêmios de Isca
-        </h1>
-        <p className="text-sm text-[#a1a8b9] mt-1">
-          Configure as empresas parceiras, o benefício do Passaporte do Competidor e os prêmios especiais por marca.
-        </p>
+    <div className="max-w-3xl">
+      <div className="flex items-center justify-between gap-3">
+        <h1 className="text-2xl font-bold text-[#f3f4f6] tracking-tight">Patrocinadores</h1>
+        <button
+          type="button"
+          onClick={() => selectPat(null)}
+          className="h-12 px-2 text-base font-semibold text-[#e5c158] hover:text-[#cfab44] cursor-pointer"
+        >
+          Novo patrocinador
+        </button>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
-        <div className="el-card overflow-hidden">
-          <div className="p-4 border-b border-white/10 flex items-center justify-between bg-[#060a13]">
-            <span className="text-xs font-heading font-semibold text-[#e5c158]">
-              Parceiros ({patrocinadores.length})
-            </span>
+      <ul className="mt-3 divide-y divide-white/10 border-y border-white/10">
+        {patrocinadores.map((p) => (
+          <li key={p.id} className="flex items-center justify-between gap-2">
             <button
               type="button"
-              onClick={() => selectPat(null)}
-              className="el-btn-gold h-8 px-3.5 text-xs"
+              onClick={() => selectPat(p)}
+              aria-current={editingId === p.id}
+              className="min-h-14 flex-1 py-2 text-left cursor-pointer"
             >
-              Novo Parceiro
-            </button>
-          </div>
-
-          <div className="divide-y divide-white/10">
-            {patrocinadores.map((p) => (
-              <div
-                key={p.id}
-                className={`p-4 flex items-center justify-between gap-2 ${
-                  editingId === p.id ? 'bg-[#0c111c] border-l-2 border-[#e5c158]' : 'hover:bg-[#0c111c]/60'
+              <span
+                className={`block text-base font-semibold ${
+                  editingId === p.id ? 'text-[#e5c158]' : 'text-[#f3f4f6]'
                 }`}
               >
-                <button
-                  type="button"
-                  onClick={() => selectPat(p)}
-                  className="text-left flex-1 cursor-pointer"
-                >
-                  <div className="text-sm font-heading font-bold text-[#f3f4f6]">{p.nome}</div>
-                  <div className="text-xs text-[#e5c158] font-medium mt-0.5">
-                    Cota {p.cota} • {p.endereco_cidade}
-                  </div>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleDelete(p.id)}
-                  className="px-2.5 py-1 rounded-full text-xs font-semibold text-red-300 hover:bg-red-950 cursor-pointer"
-                >
-                  Excluir
-                </button>
-              </div>
-            ))}
+                {p.nome}
+              </span>
+              <span className="block text-sm text-[#a1a8b9]">
+                <span className="capitalize">{p.cota}</span> · {p.endereco_cidade}
+              </span>
+            </button>
+            <button
+              type="button"
+              onClick={() => handleDelete(p.id)}
+              className="h-12 px-2 text-sm font-semibold text-rose-400 hover:text-rose-300 cursor-pointer"
+            >
+              Excluir
+            </button>
+          </li>
+        ))}
+      </ul>
+
+      <form
+        onSubmit={handleSave}
+        className="mt-8 max-w-xl space-y-5 border-t border-white/10 pt-6"
+      >
+        <h2 className="text-lg font-bold text-[#f3f4f6]">
+          {editingId === 'novo' ? 'Novo patrocinador' : `Editar: ${nome}`}
+        </h2>
+
+        <div>
+          <label htmlFor="pat-nome" className={labelClass}>
+            Nome da empresa
+          </label>
+          <input
+            id="pat-nome"
+            type="text"
+            required
+            value={nome}
+            onChange={(e) => setNome(e.target.value)}
+            className={inputClass}
+          />
+        </div>
+
+        <div>
+          <label htmlFor="pat-cota" className={labelClass}>
+            Cota
+          </label>
+          <select
+            id="pat-cota"
+            value={cota}
+            onChange={(e) => setCota(e.target.value as Patrocinador['cota'])}
+            className={`${inputClass} cursor-pointer`}
+          >
+            <option value="master">Master</option>
+            <option value="ouro">Ouro</option>
+            <option value="prata">Prata</option>
+            <option value="apoio">Apoio</option>
+          </select>
+        </div>
+
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+          <div>
+            <label htmlFor="pat-seg" className={labelClass}>
+              Segmento
+            </label>
+            <input
+              id="pat-seg"
+              type="text"
+              value={segmento}
+              onChange={(e) => setSegmento(e.target.value)}
+              className={inputClass}
+            />
+          </div>
+
+          <div>
+            <label htmlFor="pat-cid" className={labelClass}>
+              Cidade / UF
+            </label>
+            <input
+              id="pat-cid"
+              type="text"
+              value={enderecoCidade}
+              onChange={(e) => setEnderecoCidade(e.target.value)}
+              className={inputClass}
+            />
           </div>
         </div>
 
-        <form
-          onSubmit={handleSave}
-          className="lg:col-span-2 el-card-gold p-6 space-y-4"
+        <div>
+          <label htmlFor="pat-ben" className={labelClass}>
+            Benefício para inscritos
+          </label>
+          <input
+            id="pat-ben"
+            type="text"
+            value={beneficio}
+            onChange={(e) => setBeneficio(e.target.value)}
+            className={inputClass}
+          />
+        </div>
+
+        <div>
+          <label htmlFor="pat-premio" className={labelClass}>
+            Prêmio especial
+          </label>
+          <input
+            id="pat-premio"
+            type="text"
+            value={premioIsca}
+            onChange={(e) => setPremioIsca(e.target.value)}
+            className={inputClass}
+          />
+        </div>
+
+        <button
+          type="submit"
+          disabled={saving}
+          className="flex h-12 w-full cursor-pointer items-center justify-center rounded-xl bg-[#e5c158] text-base font-bold text-[#060a13] transition-colors hover:bg-[#cfab44] disabled:opacity-60"
         >
-          <h2 className="text-lg font-heading font-bold text-[#f3f4f6] border-b border-white/10 pb-3">
-            {editingId === 'novo' ? 'Adicionar Patrocinador' : `Editando: ${nome}`}
-          </h2>
-
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div className="sm:col-span-2">
-              <label htmlFor="pat-nome" className="block text-xs font-semibold text-[#f3f4f6] mb-1.5">
-                Nome da Empresa / Marca
-              </label>
-              <input
-                id="pat-nome"
-                type="text"
-                required
-                value={nome}
-                onChange={(e) => setNome(e.target.value)}
-                className="w-full h-11 px-4 rounded-xl bg-[#060a13] border border-white/15 text-sm text-[#f3f4f6]"
-              />
-            </div>
-
-            <div>
-              <label htmlFor="pat-cota" className="block text-xs font-semibold text-[#f3f4f6] mb-1.5">
-                Cota de Patrocínio
-              </label>
-              <select
-                id="pat-cota"
-                value={cota}
-                onChange={(e) => setCota(e.target.value as Patrocinador['cota'])}
-                className="w-full h-11 px-3.5 rounded-xl bg-[#060a13] border border-white/15 text-sm text-[#f3f4f6]"
-              >
-                <option value="master">Master</option>
-                <option value="ouro">Ouro</option>
-                <option value="prata">Prata</option>
-                <option value="apoio">Apoio</option>
-              </select>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label htmlFor="pat-seg" className="block text-xs font-semibold text-[#f3f4f6] mb-1.5">
-                Segmento de Atuação
-              </label>
-              <input
-                id="pat-seg"
-                type="text"
-                value={segmento}
-                onChange={(e) => setSegmento(e.target.value)}
-                className="w-full h-11 px-4 rounded-xl bg-[#060a13] border border-white/15 text-sm text-[#f3f4f6]"
-              />
-            </div>
-
-            <div>
-              <label htmlFor="pat-cid" className="block text-xs font-semibold text-[#f3f4f6] mb-1.5">
-                Cidade / UF
-              </label>
-              <input
-                id="pat-cid"
-                type="text"
-                value={enderecoCidade}
-                onChange={(e) => setEnderecoCidade(e.target.value)}
-                className="w-full h-11 px-4 rounded-xl bg-[#060a13] border border-white/15 text-sm text-[#f3f4f6]"
-              />
-            </div>
-          </div>
-
-          <div>
-            <label htmlFor="pat-ben" className="block text-xs font-semibold text-[#f3f4f6] mb-1.5">
-              Benefício / Desconto para Competidores Inscritos
-            </label>
-            <input
-              id="pat-ben"
-              type="text"
-              value={beneficio}
-              onChange={(e) => setBeneficio(e.target.value)}
-              className="w-full h-11 px-4 rounded-xl bg-[#060a13] border border-white/15 text-sm text-[#f3f4f6]"
-            />
-          </div>
-
-          <div>
-            <label htmlFor="pat-premio" className="block text-xs font-semibold text-[#f3f4f6] mb-1.5">
-              Prêmio Especial / Bônus de Captura Completa
-            </label>
-            <input
-              id="pat-premio"
-              type="text"
-              value={premioIsca}
-              onChange={(e) => setPremioIsca(e.target.value)}
-              className="w-full h-11 px-4 rounded-xl bg-[#060a13] border border-white/15 text-sm text-[#f3f4f6]"
-            />
-          </div>
-
-          <button
-            type="submit"
-            disabled={saving}
-            className="el-btn-gold h-11 px-6 text-sm"
-          >
-            {saving ? 'Salvando...' : 'Salvar Patrocinador'}
-          </button>
-        </form>
-      </div>
+          {saving ? 'Salvando...' : 'Salvar patrocinador'}
+        </button>
+      </form>
     </div>
   );
 }

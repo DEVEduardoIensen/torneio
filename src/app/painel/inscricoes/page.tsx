@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { CheckCircle2, Clock, Copy, FileCheck2, ShieldCheck, Store } from 'lucide-react';
+import { Copy } from 'lucide-react';
 import { usePainel } from '@/components/PainelContext';
 
 export default function PainelInscricoesPage() {
@@ -42,176 +42,130 @@ export default function PainelInscricoesPage() {
     }
   };
 
+  const pago = minhaInscricao?.status_pagamento === 'pago';
+  const pct = temporada?.beneficio_desconto_parceiros_pct || 15;
+
   return (
-    <div className="space-y-8">
-      <div>
-        <h1 className="text-2xl font-heading font-bold text-[#f3f4f6] tracking-tight">
-          Minha Inscrição e Passaporte do Competidor
-        </h1>
-        <p className="text-sm text-[#a1a8b9] mt-1">
-          Com uma única inscrição ativa você compete em todas as categorias compatíveis e garante{' '}
-          {temporada?.beneficio_desconto_parceiros_pct || 15}% de desconto nas lojas parceiras.
-        </p>
-      </div>
+    <div className="max-w-xl">
+      <h1 className="text-2xl font-bold text-[#f3f4f6] tracking-tight">Inscrição</h1>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Credencial Oficial do Pescador */}
-        <div className="bg-[#080c14] border border-[#e5c158]/25 rounded-2xl p-6 space-y-5 shadow-xl">
-          <div className="flex items-center justify-between border-b border-white/10 pb-4">
-            <div className="flex items-center gap-3">
-              <img
-                src="/brand/logo_header.webp"
-                alt="Eldorado Pesca"
-                className="h-12 w-auto object-contain"
-              />
-              <div>
-                <span className="text-xs font-semibold text-[#e5c158] block">
-                  Credencial Oficial da Temporada
-                </span>
-                <h2 className="text-lg font-heading font-bold text-[#f3f4f6]">{currentUser?.nome}</h2>
-              </div>
-            </div>
-            <div className="text-right">
-              <span className="text-xs text-[#a1a8b9] block">Credencial</span>
-              <strong className="text-xs text-[#e5c158] font-medium">
-                Ativa
-              </strong>
-            </div>
-          </div>
-
-          <div className="space-y-3 text-sm">
-            <div className="flex justify-between py-1.5 border-b border-white/5">
-              <span className="text-[#a1a8b9]">Status da Homologação</span>
-              {minhaInscricao?.status_pagamento === 'pago' ? (
-                <span className="inline-flex items-center gap-1.5 text-xs font-medium text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-md border border-emerald-500/20">
-                  <CheckCircle2 className="w-3.5 h-3.5" />
-                  <span>Passaporte Ativo e Homologado</span>
-                </span>
-              ) : (
-                <span className="inline-flex items-center gap-1.5 text-xs font-medium text-zinc-300 bg-zinc-800/80 px-2.5 py-1 rounded-md border border-zinc-700/50">
-                  <Clock className="w-3.5 h-3.5" />
-                  <span>Aguardando Confirmação Pix</span>
-                </span>
-              )}
-            </div>
-
-            <div className="flex justify-between py-1.5 border-b border-white/5">
-              <span className="text-[#a1a8b9]">WhatsApp Cadastrado</span>
-              <span className="font-mono text-[#f3f4f6] tabular-nums">{currentUser?.whatsapp}</span>
-            </div>
-
-            {currentUser?.role !== 'admin' && currentUser?.cidade_uf && (
-              <div className="flex justify-between py-1.5 border-b border-white/5">
-                <span className="text-[#a1a8b9]">Cidade / UF</span>
-                <span className="text-[#f3f4f6]">{currentUser.cidade_uf}</span>
-              </div>
-            )}
-
-            <div className="flex justify-between py-1.5 border-b border-white/5">
-              <span className="text-[#a1a8b9]">Equipe</span>
-              <span className="text-[#f3f4f6]">{currentUser?.equipe || 'Individual'}</span>
-            </div>
-          </div>
-
-          <div className="pt-2">
-            {!minhaInscricao ? (
-              <div className="space-y-3">
-                <label className="block text-xs font-medium text-[#a1a8b9]">
-                  Selecione sua modalidade principal:
-                </label>
-                <select
-                  value={modalidade}
-                  onChange={(e) => setModalidade(e.target.value)}
-                  className="w-full h-11 px-3.5 rounded-xl bg-[#060a13] border border-white/10 text-sm text-[#f3f4f6] focus:outline-none focus:border-[#e5c158]"
-                >
-                  <option value="embarcado">Embarcado (Barco com motor / Lancha)</option>
-                  <option value="caiaque">Caiaque (Remo ou Pedal)</option>
-                  <option value="barranco">Barranco / Açude / Pesqueiro</option>
-                </select>
-
-                <button
-                  type="button"
-                  onClick={handleSolicitarInscricao}
-                  disabled={saving}
-                  className="w-full h-11 rounded-lg bg-[#e5c158] hover:bg-[#cfab44] disabled:opacity-60 text-[#060a13] font-bold text-sm flex items-center justify-center gap-2 transition-colors cursor-pointer shadow-md"
-                >
-                  <FileCheck2 className="w-4 h-4" />
-                  <span>{saving ? 'Ativando...' : 'Ativar Minha Inscrição Oficial'}</span>
-                </button>
-              </div>
-            ) : (
-              <div className="p-4 rounded-xl bg-[#080c14] border border-white/10 text-xs text-[#a1a8b9] flex items-center gap-3">
-                <ShieldCheck className="w-5 h-5 text-[#e5c158] shrink-0" />
-                <span>
-                  Sua inscrição é única e vitalícia para todas as etapas da temporada{' '}
-                  {temporada?.nome}. Apresente seu nome nas lojas conveniadas para obter os descontos.
-                </span>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Informações de Pagamento e Chave Pix */}
-        <div className="bg-[#080c14] border border-white/10 rounded-2xl p-6 space-y-5 shadow-xl">
-          <div className="border-b border-white/10 pb-4">
-            <span className="text-xs font-semibold text-[#e5c158] block uppercase tracking-wider">
-              Pagamento via Pix
-            </span>
-            <h2 className="text-lg font-heading font-bold text-[#f3f4f6] mt-0.5">
-              Taxa de Inscrição da Temporada
+      {/* Passaporte: o único card da página */}
+      <section
+        aria-labelledby="passaporte-title"
+        className="mt-4 rounded-2xl border border-[#e5c158]/40 bg-[#e5c158]/5 p-5"
+      >
+        <div className="flex items-center justify-between gap-3">
+          <div className="min-w-0">
+            <p className="text-sm text-[#a1a8b9]">Passaporte {temporada?.nome}</p>
+            <h2 id="passaporte-title" className="truncate text-xl font-bold text-[#f3f4f6]">
+              {currentUser?.nome}
             </h2>
-            <div className="mt-2 text-2xl font-heading font-bold text-[#e5c158] tabular-nums">
-              R$ {valorReais}
-            </div>
-            <p className="text-xs text-[#a1a8b9] mt-1">
-              Valor único para acesso a todas as etapas e todas as categorias da temporada.
-            </p>
           </div>
-
-          <div className="space-y-3">
-            <label className="block text-xs font-medium text-[#a1a8b9]">
-              Chave Pix Oficial da Organização:
-            </label>
-            <div className="flex items-center gap-2">
-              <input
-                type="text"
-                readOnly
-                value={chavePix}
-                className="flex-1 h-11 px-3.5 rounded-xl bg-[#060a13] border border-white/10 text-[#f3f4f6] font-mono text-xs tabular-nums focus:outline-none"
-              />
-              <button
-                type="button"
-                onClick={handleCopyPix}
-                className="h-11 px-4 rounded-xl bg-[#0d1626] hover:bg-[#121c2e] border border-[#e5c158]/30 hover:border-[#e5c158] text-[#e5c158] text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer shrink-0"
-              >
-                <Copy className="w-4 h-4" />
-                <span>{copiedPix ? 'Copiado!' : 'Copiar Chave'}</span>
-              </button>
-            </div>
-            <p className="text-xs text-[#a1a8b9]">
-              Após realizar o Pix, a comissão financeira homologa sua credencial e libera seu número
-              oficial de competidor em instantes.
-            </p>
-          </div>
-
-          <div className="pt-4 border-t border-white/10">
-            <div className="flex items-center gap-2 text-xs font-semibold text-[#f3f4f6] mb-3">
-              <Store className="w-4 h-4 text-[#e5c158]" />
-              <span>
-                Lojas parceiras que aceitam o desconto de {temporada?.beneficio_desconto_parceiros_pct}%:
-              </span>
-            </div>
-            <div className="grid grid-cols-2 gap-2 text-xs text-[#a1a8b9]">
-              {patrocinadores.slice(0, 4).map((p) => (
-                <div key={p.id} className="p-2.5 rounded-xl bg-[#060a13] border border-white/5 truncate">
-                  <span className="font-heading font-bold text-[#f3f4f6] block truncate">{p.nome}</span>
-                  <span className="text-xs text-[#a1a8b9]">{p.endereco_cidade}</span>
-                </div>
-              ))}
-            </div>
-          </div>
+          <span
+            className={`shrink-0 text-sm font-semibold ${pago ? 'text-emerald-400' : 'text-[#a1a8b9]'}`}
+          >
+            {pago ? 'Ativo' : 'Aguardando Pix'}
+          </span>
         </div>
-      </div>
+
+        <dl className="mt-4 divide-y divide-white/10 border-t border-white/10 text-sm">
+          <div className="flex justify-between py-2.5">
+            <dt className="text-[#a1a8b9]">WhatsApp</dt>
+            <dd className="tabular-nums text-[#f3f4f6]">{currentUser?.whatsapp}</dd>
+          </div>
+          {currentUser?.role !== 'admin' && currentUser?.cidade_uf && (
+            <div className="flex justify-between py-2.5">
+              <dt className="text-[#a1a8b9]">Cidade</dt>
+              <dd className="text-[#f3f4f6]">{currentUser.cidade_uf}</dd>
+            </div>
+          )}
+          <div className="flex justify-between py-2.5">
+            <dt className="text-[#a1a8b9]">Equipe</dt>
+            <dd className="text-[#f3f4f6]">{currentUser?.equipe || 'Individual'}</dd>
+          </div>
+        </dl>
+
+        {!minhaInscricao ? (
+          <div className="mt-4 space-y-3">
+            <label htmlFor="modalidade" className="block text-sm font-medium text-[#a1a8b9]">
+              Modalidade principal
+            </label>
+            <select
+              id="modalidade"
+              value={modalidade}
+              onChange={(e) => setModalidade(e.target.value)}
+              className="h-12 w-full rounded-xl border border-white/15 bg-[#060a13] px-3.5 text-base text-[#f3f4f6] focus:border-[#e5c158] focus:outline-none"
+            >
+              <option value="embarcado">Embarcado</option>
+              <option value="caiaque">Caiaque</option>
+              <option value="barranco">Barranco / Açude</option>
+            </select>
+            <button
+              type="button"
+              onClick={handleSolicitarInscricao}
+              disabled={saving}
+              className="h-12 w-full cursor-pointer rounded-xl bg-[#e5c158] text-base font-bold text-[#060a13] transition-colors hover:bg-[#cfab44] disabled:opacity-60"
+            >
+              {saving ? 'Ativando...' : 'Ativar inscrição'}
+            </button>
+          </div>
+        ) : (
+          <p className="mt-4 text-sm text-[#a1a8b9]">
+            Vale para todas as etapas. Apresente seu nome nas lojas parceiras para ter {pct}% de
+            desconto.
+          </p>
+        )}
+      </section>
+
+      <section className="mt-8" aria-labelledby="pix-title">
+        <h2 id="pix-title" className="text-lg font-bold text-[#f3f4f6]">
+          Pagamento via Pix
+        </h2>
+        <p className="mt-1 text-sm text-[#a1a8b9]">
+          <span className="text-2xl font-bold tabular-nums text-[#e5c158]">R$ {valorReais}</span>
+          <span className="ml-2">todas as etapas e categorias</span>
+        </p>
+
+        <label htmlFor="chave-pix" className="mt-4 block text-sm font-medium text-[#a1a8b9]">
+          Chave Pix
+        </label>
+        <div className="mt-1.5 flex gap-2">
+          <input
+            id="chave-pix"
+            type="text"
+            readOnly
+            value={chavePix}
+            className="h-12 min-w-0 flex-1 rounded-xl border border-white/15 bg-transparent px-3.5 text-sm tabular-nums text-[#f3f4f6] focus:outline-none"
+          />
+          <button
+            type="button"
+            onClick={handleCopyPix}
+            className="flex h-12 shrink-0 cursor-pointer items-center gap-2 rounded-xl border border-[#e5c158] px-4 text-sm font-semibold text-[#e5c158] transition-colors hover:bg-[#e5c158]/10"
+          >
+            <Copy className="h-4 w-4" aria-hidden />
+            {copiedPix ? 'Copiado' : 'Copiar'}
+          </button>
+        </div>
+        <p className="mt-2 text-sm text-[#a1a8b9]">
+          Depois do Pix, a organização confirma e libera seu número de competidor.
+        </p>
+      </section>
+
+      {patrocinadores.length > 0 && (
+        <section className="mt-8" aria-labelledby="lojas-title">
+          <h2 id="lojas-title" className="text-lg font-bold text-[#f3f4f6]">
+            Lojas com {pct}% de desconto
+          </h2>
+          <ul className="mt-2 divide-y divide-white/10 border-y border-white/10 text-sm">
+            {patrocinadores.slice(0, 4).map((p) => (
+              <li key={p.id} className="flex justify-between gap-3 py-3">
+                <span className="font-semibold text-[#f3f4f6]">{p.nome}</span>
+                <span className="text-[#a1a8b9]">{p.endereco_cidade}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
     </div>
   );
 }

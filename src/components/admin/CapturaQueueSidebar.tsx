@@ -15,58 +15,60 @@ export function CapturaQueueSidebar({
   onSelect,
 }: CapturaQueueSidebarProps) {
   return (
-    <div className="el-card overflow-hidden">
-      <div className="px-4 py-3.5 border-b border-white/10 bg-[#060a13] text-xs font-heading font-semibold text-[#e5c158]">
-        Fila de Capturas ({filtered.length})
-      </div>
-      <div className="divide-y divide-white/10 max-h-[620px] overflow-y-auto">
-        {filtered.length === 0 ? (
-          <div className="p-6 text-center text-sm text-[#a1a8b9]">
-            Nenhum registro encontrado neste filtro.
-          </div>
-        ) : (
-          filtered.map((reg) => {
+    <section aria-label="Fila de capturas">
+      <h2 className="text-base font-semibold text-[#f3f4f6]">Fila ({filtered.length})</h2>
+      {filtered.length === 0 ? (
+        <p className="mt-3 text-sm text-[#a1a8b9]">Nenhum registro neste filtro.</p>
+      ) : (
+        <ul className="mt-3 max-h-80 divide-y divide-white/10 overflow-y-auto border-y border-white/10 lg:max-h-[620px]">
+          {filtered.map((reg) => {
             const active = selectedReg?.id === reg.id;
             return (
-              <button
-                key={reg.id}
-                type="button"
-                onClick={() => onSelect(reg.id)}
-                className={`w-full p-4 text-left transition-colors cursor-pointer ${
-                  active ? 'bg-[#0c111c] border-l-2 border-[#e5c158]' : 'hover:bg-[#0c111c]/60'
-                }`}
-              >
-                <div className="flex items-center justify-between gap-2 text-xs">
-                  <span className="font-heading font-bold text-[#f3f4f6]">{reg.pescador_nome}</span>
-                  <span className="font-heading font-bold text-[#e5c158] tabular-nums">
-                    {(reg.medida_aprovada ?? reg.medida_declarada).toFixed(1)} cm
+              <li key={reg.id}>
+                <button
+                  type="button"
+                  onClick={() => onSelect(reg.id)}
+                  aria-current={active}
+                  className={`block min-h-12 w-full cursor-pointer border-l-2 py-3 pl-3 pr-1 text-left transition-colors ${
+                    active
+                      ? 'border-[#e5c158] bg-white/5'
+                      : 'border-transparent hover:bg-white/5'
+                  }`}
+                >
+                  <span className="flex items-baseline justify-between gap-2">
+                    <span className="text-base font-semibold text-[#f3f4f6]">
+                      {reg.pescador_nome}
+                    </span>
+                    <span className="text-sm font-semibold tabular-nums text-[#e5c158]">
+                      {(reg.medida_aprovada ?? reg.medida_declarada).toFixed(1)} cm
+                    </span>
                   </span>
-                </div>
-                <div className="text-xs text-[#a1a8b9] mt-1">{reg.categoria_nome}</div>
-                <div className="flex items-center justify-between mt-2 text-xs">
-                  <span className="text-[#a1a8b9]">{reg.isca_marca}</span>
-                  <span
-                    className={`px-2 py-0.5 rounded-md text-xs font-medium ${
-                      reg.status === 'aprovado'
-                        ? 'bg-emerald-500/10 text-emerald-400'
+                  <span className="mt-0.5 flex items-baseline justify-between gap-2 text-sm text-[#a1a8b9]">
+                    <span>
+                      {reg.categoria_nome} · {reg.isca_marca}
+                    </span>
+                    <span
+                      className={
+                        reg.status === 'aprovado'
+                          ? 'text-emerald-400'
+                          : reg.status === 'reprovado'
+                          ? 'text-rose-400'
+                          : 'text-[#a1a8b9]'
+                      }
+                    >
+                      {reg.status === 'aprovado'
+                        ? 'Homologado'
                         : reg.status === 'reprovado'
-                        ? 'bg-rose-500/10 text-rose-400'
-                        : 'bg-zinc-800 text-zinc-300'
-                    }`}
-                  >
-                    {reg.status === 'aprovado'
-                      ? 'Homologado'
-                      : reg.status === 'reprovado'
-                      ? 'Reprovado'
-                      : 'Em Análise'}
+                        ? 'Reprovado'
+                        : 'Em análise'}
+                    </span>
                   </span>
-                </div>
-              </button>
+                </button>
+              </li>
             );
-          })
-        )}
-      </div>
-    </div>
+          })}
+        </ul>
+      )}
+    </section>
   );
 }
-

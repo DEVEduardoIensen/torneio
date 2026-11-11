@@ -6,6 +6,9 @@ interface VideoInspectionPlayerProps {
   videoUrl: string;
 }
 
+const SLOW_RATES = [0.25, 0.5, 0.75];
+const FAST_RATES = [1.25, 1.5, 2, 3];
+
 export function VideoInspectionPlayer({ videoUrl }: VideoInspectionPlayerProps) {
   const [playbackRate, setPlaybackRate] = useState<number>(1);
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -17,8 +20,17 @@ export function VideoInspectionPlayer({ videoUrl }: VideoInspectionPlayerProps) 
     }
   };
 
+  const rateClass = (active: boolean) =>
+    `h-11 min-w-12 shrink-0 cursor-pointer rounded-xl px-3 text-sm font-semibold tabular-nums transition-colors ${
+      active
+        ? 'bg-[#e5c158] text-[#060a13]'
+        : 'text-[#a1a8b9] hover:text-[#f3f4f6]'
+    }`;
+
+  const rates = [...SLOW_RATES, 1, ...FAST_RATES];
+
   return (
-    <div className="space-y-3">
+    <div>
       <video
         ref={videoRef}
         src={videoUrl}
@@ -27,64 +39,27 @@ export function VideoInspectionPlayer({ videoUrl }: VideoInspectionPlayerProps) 
         onLoadedMetadata={(e) => {
           e.currentTarget.playbackRate = playbackRate;
         }}
-        className="w-full rounded-xl bg-black max-h-72 border border-white/10 shadow-lg"
+        className="max-h-72 w-full rounded-xl bg-black"
       />
-      <div className="bg-[#060a13] border border-white/10 rounded-xl p-3 space-y-2.5">
-        <div className="flex items-center justify-between text-xs">
-          <span className="text-[#a1a8b9] font-medium">
-            Controle de Velocidade (Áudio & Vídeo):
-          </span>
-          <span className="font-mono text-[#e5c158] font-bold">
-            {playbackRate}x {playbackRate < 1 ? '• Câmera Lenta' : playbackRate > 1 ? '• Acelerado' : '• Normal'}
-          </span>
-        </div>
-        <div className="flex flex-wrap items-center gap-1.5">
-          <span className="text-[11px] text-[#a1a8b9] font-semibold mr-1">Lenta:</span>
-          {[0.25, 0.5, 0.75].map((rate) => (
-            <button
-              key={rate}
-              type="button"
-              onClick={() => handleSpeedChange(rate)}
-              className={`px-2.5 py-1 rounded-lg text-xs font-semibold tabular-nums cursor-pointer transition-colors ${
-                playbackRate === rate
-                  ? 'bg-[#e5c158] text-[#060a13] font-bold shadow-sm'
-                  : 'bg-[#080c14] text-[#a1a8b9] hover:text-[#f3f4f6] hover:bg-white/5 border border-white/10'
-              }`}
-            >
-              {rate}x
-            </button>
-          ))}
-          <span className="text-xs text-white/20 mx-1">|</span>
+      <p className="mt-3 text-sm text-[#a1a8b9]">
+        Velocidade:{' '}
+        <span className="font-semibold tabular-nums text-[#e5c158]">
+          {playbackRate}x {playbackRate < 1 ? '· câmera lenta' : playbackRate > 1 ? '· acelerado' : '· normal'}
+        </span>
+      </p>
+      <div className="mt-1 flex flex-wrap gap-1" role="group" aria-label="Velocidade do vídeo">
+        {rates.map((rate) => (
           <button
+            key={rate}
             type="button"
-            onClick={() => handleSpeedChange(1)}
-            className={`px-3 py-1 rounded-lg text-xs font-semibold tabular-nums cursor-pointer transition-colors ${
-              playbackRate === 1
-                ? 'bg-[#e5c158] text-[#060a13] font-bold shadow-sm'
-                : 'bg-[#080c14] text-[#a1a8b9] hover:text-[#f3f4f6] hover:bg-white/5 border border-white/10'
-            }`}
+            onClick={() => handleSpeedChange(rate)}
+            aria-pressed={playbackRate === rate}
+            className={rateClass(playbackRate === rate)}
           >
-            1x Normal
+            {rate}x
           </button>
-          <span className="text-xs text-white/20 mx-1">|</span>
-          <span className="text-[11px] text-[#a1a8b9] font-semibold mr-1">Acelerar:</span>
-          {[1.25, 1.5, 2, 3].map((rate) => (
-            <button
-              key={rate}
-              type="button"
-              onClick={() => handleSpeedChange(rate)}
-              className={`px-2.5 py-1 rounded-lg text-xs font-semibold tabular-nums cursor-pointer transition-colors ${
-                playbackRate === rate
-                  ? 'bg-[#e5c158] text-[#060a13] font-bold shadow-sm'
-                  : 'bg-[#080c14] text-[#a1a8b9] hover:text-[#f3f4f6] hover:bg-white/5 border border-white/10'
-              }`}
-            >
-              {rate}x
-            </button>
-          ))}
-        </div>
+        ))}
       </div>
     </div>
   );
 }
-

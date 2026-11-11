@@ -10,93 +10,50 @@ interface CategoryLeaderCardsProps {
   formatFormula: (formula: string, topN: number, unidade: string) => string;
 }
 
-export function CategoryLeaderCards({ categoryRankings, formatFormula }: CategoryLeaderCardsProps) {
+export function CategoryLeaderCards({ categoryRankings }: CategoryLeaderCardsProps) {
   return (
-    <section className="space-y-4">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 sm:gap-2">
-        <div>
-          <h2 className="text-base sm:text-lg font-bold text-[#f3f4f6]">
-            Líderes da Temporada
-          </h2>
-          <p className="text-xs text-[#a1a8b9]">
-            Primeiro colocado em cada modalidade oficial
-          </p>
-        </div>
+    <section aria-labelledby="lideres-title">
+      <div className="flex items-baseline justify-between gap-3">
+        <h2 id="lideres-title" className="text-lg font-bold text-[#f3f4f6]">
+          Líderes
+        </h2>
         <Link
           href="/painel/ranking"
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#e5c158] hover:text-[#cfab44] self-start sm:self-auto"
+          className="inline-flex h-10 items-center gap-1.5 text-sm font-semibold text-[#e5c158] hover:text-[#cfab44]"
         >
-          <span>Classificação completa</span>
-          <ArrowRight className="w-3.5 h-3.5" />
+          Classificação
+          <ArrowRight className="h-4 w-4" aria-hidden />
         </Link>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+      <ul className="divide-y divide-white/10 border-y border-white/10">
         {categoryRankings.map(({ categoria, entries }) => {
           const leader = entries[0];
           return (
-            <div
-              key={categoria.id}
-              className="bg-[#080c14] border border-white/10 hover:border-[#e5c158]/35 rounded-xl p-4 sm:p-5 flex flex-col justify-between transition-colors"
-            >
-              <div>
-                <div className="flex items-center justify-between gap-2 text-xs text-[#a1a8b9] mb-2">
-                  <span className="font-medium text-[#e5c158]">{categoria.especie}</span>
-                  <span className="font-mono tabular-nums">
-                    Mín. {categoria.medida_minima} {categoria.unidade_medida}
+            <li key={categoria.id}>
+              <Link
+                href={`/painel/ranking?categoria=${categoria.id}`}
+                className="flex items-center justify-between gap-4 py-3.5 hover:bg-white/[0.03]"
+              >
+                <span className="min-w-0">
+                  <span className="block text-sm text-[#a1a8b9]">{categoria.nome}</span>
+                  <span className="block truncate text-base font-semibold text-[#f3f4f6]">
+                    {leader ? leader.pescador_nome : 'Sem capturas'}
                   </span>
-                </div>
-                <h3 className="text-base font-semibold text-[#f3f4f6]">{categoria.nome}</h3>
-                <p className="text-xs text-[#a1a8b9] mt-1">
-                  Regra: {formatFormula(categoria.formula_ranking, categoria.top_n_peixes, categoria.unidade_medida)}
-                </p>
-
-                <div className="mt-4 pt-4 border-t border-white/10">
-                  {leader ? (
-                    <div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-semibold text-[#e5c158]">
-                          1º Colocado Atual
-                        </span>
-                        <span className="text-base font-bold text-[#e5c158] tabular-nums">
-                          {leader.pontuacao_total.toFixed(1)} {categoria.unidade_medida}
-                        </span>
-                      </div>
-                      <Link
-                        href={`/painel/pescadores/${leader.pescador_id}`}
-                        className="text-sm font-semibold text-[#f3f4f6] hover:text-[#e5c158] block mt-1"
-                      >
-                        {leader.pescador_nome}
-                      </Link>
-                      <div className="text-xs text-[#a1a8b9] mt-0.5 tabular-nums">
-                        {leader.cidade_uf} • Maior peixe: {leader.maior_exemplar.toFixed(1)}{' '}
-                        {categoria.unidade_medida} ({leader.capturas_computadas.length} peixes na nota)
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="text-xs text-[#a1a8b9] py-2">
-                      Nenhuma captura homologada nesta categoria até o momento.
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-between text-xs">
-                <span className="text-[#a1a8b9] tabular-nums">
-                  {entries.length} {entries.length === 1 ? 'competidor pontuando' : 'competidores pontuando'}
                 </span>
-                <Link
-                  href={`/painel/ranking?categoria=${categoria.id}`}
-                  className="font-semibold text-[#e5c158] hover:text-[#cfab44]"
-                >
-                  Ver ranking
-                </Link>
-              </div>
-            </div>
+                {leader && (
+                  <span className="shrink-0 text-lg font-bold tabular-nums text-[#e5c158]">
+                    {leader.pontuacao_total.toFixed(1)}{' '}
+                    <span className="text-sm font-normal text-[#a1a8b9]">
+                      {categoria.unidade_medida}
+                    </span>
+                  </span>
+                )}
+              </Link>
+            </li>
           );
         })}
-      </div>
+      </ul>
     </section>
   );
 }
-

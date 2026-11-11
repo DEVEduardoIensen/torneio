@@ -28,49 +28,46 @@ export default function AdminRegistrosPage() {
     await refresh();
   };
 
-  return (
-    <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-heading font-bold text-[#f3f4f6] tracking-tight">
-            Mesa de Arbitragem e Homologação de Capturas
-          </h1>
-          <p className="text-sm text-[#a1a8b9] mt-1">
-            Inspeção de vídeo em câmera lenta, conferência da régua oficial e aplicação do checklist dinâmico da categoria.
-          </p>
-        </div>
+  const labelMap = {
+    pendente: 'Em análise',
+    aprovado: 'Homologados',
+    reprovado: 'Reprovados',
+    todos: 'Todos',
+  };
 
-        <div className="flex flex-wrap gap-2">
-          {(['pendente', 'aprovado', 'reprovado', 'todos'] as const).map((st) => {
-            const count =
-              st === 'todos'
-                ? registros.length
-                : registros.filter((r) => r.status === st).length;
-            const labelMap = {
-              pendente: 'Em Análise',
-              aprovado: 'Homologados',
-              reprovado: 'Reprovados',
-              todos: 'Todos',
-            };
-            return (
-              <button
-                key={st}
-                type="button"
-                onClick={() => setStatusFilter(st)}
-                className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors cursor-pointer tabular-nums ${
-                  statusFilter === st
-                    ? 'bg-[#e5c158] text-[#060a13] font-bold'
-                    : 'bg-[#080c14] text-[#f3f4f6] hover:border-[#e5c158]/50 border border-white/10'
-                }`}
-              >
-                {labelMap[st]} ({count})
-              </button>
-            );
-          })}
-        </div>
+  return (
+    <div className="max-w-5xl">
+      <h1 className="text-2xl font-bold tracking-tight text-[#f3f4f6]">Arbitragem</h1>
+
+      <div
+        role="tablist"
+        aria-label="Filtrar por status"
+        className="-mx-4 mt-4 flex overflow-x-auto border-b border-white/10 px-4 sm:mx-0 sm:px-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      >
+        {(['pendente', 'aprovado', 'reprovado', 'todos'] as const).map((st) => {
+          const count =
+            st === 'todos' ? registros.length : registros.filter((r) => r.status === st).length;
+          const active = statusFilter === st;
+          return (
+            <button
+              key={st}
+              type="button"
+              role="tab"
+              aria-selected={active}
+              onClick={() => setStatusFilter(st)}
+              className={`-mb-px h-12 shrink-0 cursor-pointer whitespace-nowrap border-b-2 px-3.5 text-sm font-semibold tabular-nums transition-colors ${
+                active
+                  ? 'border-[#e5c158] text-[#e5c158]'
+                  : 'border-transparent text-[#a1a8b9] hover:text-[#f3f4f6]'
+              }`}
+            >
+              {labelMap[st]} ({count})
+            </button>
+          );
+        })}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+      <div className="mt-6 grid grid-cols-1 items-start gap-8 lg:grid-cols-[18rem_1fr]">
         {/* Fila Lateral de Submissões */}
         <CapturaQueueSidebar
           filtered={filtered}
@@ -79,11 +76,11 @@ export default function AdminRegistrosPage() {
         />
 
         {/* Console Principal de Auditoria */}
-        <div className="lg:col-span-2 el-card-gold p-6">
+        <div className="min-w-0">
           {!selectedReg ? (
-            <div className="py-12 text-center text-sm text-[#a1a8b9]">
-              Selecione uma captura na fila ao lado para iniciar a auditoria técnica.
-            </div>
+            <p className="py-12 text-center text-sm text-[#a1a8b9]">
+              Selecione uma captura na fila para auditar.
+            </p>
           ) : (
             <RegistroAuditoriaConsole
               key={selectedReg.id}

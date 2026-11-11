@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { ChevronDown, Fish, KeyRound, User } from 'lucide-react';
+import { ChevronDown, Fish } from 'lucide-react';
 import { usePainel } from '../PainelContext';
 
 interface PainelHeaderProps {
@@ -28,18 +28,12 @@ export function PainelHeader({}: PainelHeaderProps = {}) {
 
         {/* Palavra-Chave da Etapa Ativa */}
         {etapaAtiva && (
-          <div className="hidden sm:flex items-center gap-3 bg-[#060a13] border border-[#e5c158]/25 rounded-lg px-3.5 py-1.5 shadow-sm">
-            <span className="text-xs font-medium text-[#a1a8b9] truncate">
-              {etapaAtiva.titulo}:
-            </span>
-            <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#f3f4f6]">
-              <KeyRound className="w-3.5 h-3.5 text-[#e5c158]" />
-              <span>Palavra-chave:</span>
-              <strong className="font-mono text-[#e5c158] tabular-nums font-bold">
-                {etapaAtiva.revelar_palavra_chave ? etapaAtiva.palavra_chave : 'OCULTA'}
-              </strong>
-            </span>
-          </div>
+          <p className="hidden sm:block truncate text-sm text-[#a1a8b9]">
+            {etapaAtiva.titulo} · palavra-chave{' '}
+            <strong className="ml-1 font-bold tracking-wide text-[#e5c158]">
+              {etapaAtiva.revelar_palavra_chave ? etapaAtiva.palavra_chave : 'na largada'}
+            </strong>
+          </p>
         )}
       </div>
 
@@ -47,10 +41,10 @@ export function PainelHeader({}: PainelHeaderProps = {}) {
         {/* Botão Rápido de Enviar Captura */}
         <Link
           href="/painel/registros"
-          className="hidden md:inline-flex items-center gap-2 h-9 px-4 rounded-lg bg-[#e5c158] hover:bg-[#cfab44] text-[#060a13] text-xs font-bold transition-colors shadow-sm cursor-pointer"
+          className="hidden md:inline-flex items-center gap-2 h-10 px-4 rounded-xl bg-[#e5c158] hover:bg-[#cfab44] text-[#060a13] text-sm font-bold transition-colors cursor-pointer"
         >
           <Fish className="w-4 h-4 shrink-0" />
-          <span>Enviar Captura</span>
+          <span>Enviar captura</span>
         </Link>
 
         {/* Seletor Rápido de Perfil de Usuário */}
@@ -58,12 +52,11 @@ export function PainelHeader({}: PainelHeaderProps = {}) {
           <button
             type="button"
             onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-            className="flex items-center gap-2.5 bg-[#060a13] hover:bg-white/5 border border-white/10 hover:border-[#e5c158]/30 rounded-lg px-3 py-1.5 text-left transition-colors cursor-pointer"
+            className="flex items-center gap-2.5 hover:bg-white/5 rounded-xl px-3 h-11 text-left transition-colors cursor-pointer"
             aria-expanded={userDropdownOpen}
             aria-label="Alternar perfil ativo"
           >
-            <User className="w-4 h-4 text-[#e5c158] shrink-0" />
-            <div className="text-xs">
+            <div className="text-sm">
               <div className="font-medium text-[#f3f4f6] leading-tight">
                 {currentUser?.nome || 'Selecionar Perfil'}
               </div>
@@ -71,15 +64,12 @@ export function PainelHeader({}: PainelHeaderProps = {}) {
                 {currentUser?.role === 'admin' ? 'Administrador' : currentUser?.cidade_uf || 'Atleta'}
               </div>
             </div>
-            <ChevronDown className="w-3.5 h-3.5 text-[#e5c158]" />
+            <ChevronDown className="w-4 h-4 text-[#a1a8b9]" />
           </button>
 
           {userDropdownOpen && (
-            <div className="absolute right-0 mt-2 w-72 bg-[#080c14] border border-[#e5c158]/35 rounded-xl shadow-2xl p-2.5 z-50">
-              <div className="px-3 py-2 border-b border-white/10 text-xs font-semibold text-[#a1a8b9]">
-                Alternar usuário ativo (Simulador de Perfis)
-              </div>
-              <div className="max-h-64 overflow-y-auto divide-y divide-white/5 my-1">
+            <div className="absolute right-0 mt-2 w-72 bg-[#0c1322] border border-white/15 rounded-xl shadow-2xl p-1.5 z-50">
+              <div className="max-h-64 overflow-y-auto">
                 {pescadores.map((p) => (
                   <button
                     key={p.id}
@@ -88,30 +78,15 @@ export function PainelHeader({}: PainelHeaderProps = {}) {
                       switchUser(p.id);
                       setUserDropdownOpen(false);
                     }}
-                    className={`w-full flex items-center justify-between px-3 py-2.5 text-left text-xs rounded-lg transition-colors cursor-pointer ${
+                    className={`w-full flex items-center justify-between min-h-12 px-3 text-left text-sm rounded-lg transition-colors cursor-pointer ${
                       currentUser?.id === p.id
-                        ? 'bg-[#e5c158] text-[#060a13] font-bold'
+                        ? 'text-[#e5c158] font-semibold bg-white/[0.06]'
                         : 'text-[#f3f4f6] hover:bg-white/5'
                     }`}
                   >
-                    <div>
-                      <div className="font-medium">{p.nome}</div>
-                      <div
-                        className={`text-xs ${
-                          currentUser?.id === p.id ? 'text-[#060a13]/80' : 'text-[#a1a8b9]'
-                        }`}
-                      >
-                        {p.role === 'admin' ? 'Administrador' : p.cidade_uf}
-                      </div>
-                    </div>
-                    <span
-                      className={`px-2 py-0.5 rounded-md text-xs font-mono uppercase font-bold ${
-                        currentUser?.id === p.id
-                          ? 'bg-[#060a13] text-[#e5c158]'
-                          : 'bg-[#060a13] text-[#a1a8b9] border border-white/10'
-                      }`}
-                    >
-                      {p.role}
+                    <span className="font-medium">{p.nome}</span>
+                    <span className="text-xs text-[#a1a8b9]">
+                      {p.role === 'admin' ? 'Admin' : p.cidade_uf}
                     </span>
                   </button>
                 ))}

@@ -4,6 +4,10 @@ import React, { useState } from 'react';
 import { usePainel } from '@/components/PainelContext';
 import { Pescador, UserRole } from '@/types/domain';
 
+const inputClass =
+  'h-12 w-full rounded-xl border border-white/15 bg-transparent px-3.5 text-base text-[#f3f4f6] placeholder:text-[#a1a8b9]/60 focus:border-[#e5c158] focus:outline-none';
+const labelClass = 'mb-1.5 block text-sm font-medium text-[#f3f4f6]';
+
 export default function AdminPescadoresPage() {
   const { temporada, pescadores, refresh } = usePainel();
 
@@ -66,61 +70,105 @@ export default function AdminPescadoresPage() {
   };
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-heading font-bold text-[#f3f4f6] tracking-tight">
-          Cadastro de Competidores e Administradores
-        </h1>
-        <p className="text-sm text-[#a1a8b9] mt-1">
-          Adicione novos competidores ou defina permissões de administração do torneio.
-        </p>
-      </div>
+    <div className="max-w-3xl">
+      <h1 className="text-2xl font-bold text-[#f3f4f6] tracking-tight">Pescadores</h1>
 
-      <form
-        onSubmit={handleCreate}
-        className="el-card-gold p-6 space-y-4"
-      >
-        <h2 className="text-base font-heading font-bold text-[#f3f4f6]">
-          Cadastrar Novo Participante (Com Inscrição Automática)
-        </h2>
+      <ul className="mt-3 divide-y divide-white/10 border-y border-white/10">
+        {pescadores.map((p) => (
+          <li key={p.id} className="flex items-center justify-between gap-3 py-3">
+            <div className="min-w-0">
+              <p className="truncate text-base font-semibold text-[#f3f4f6]">
+                <span className="tabular-nums text-[#e5c158]">{p.numero_inscricao || 'S/N'}</span>{' '}
+                {p.nome}
+              </p>
+              <p className="truncate text-sm text-[#a1a8b9]">
+                <span className="tabular-nums">{p.whatsapp}</span> · {p.cidade_uf} · {p.equipe}
+              </p>
+            </div>
+            <select
+              aria-label={`Papel de ${p.nome}`}
+              value={p.role}
+              onChange={(e) => handleChangeRole(p, e.target.value as UserRole)}
+              className="h-12 shrink-0 cursor-pointer rounded-xl border border-white/15 bg-transparent px-3 text-base text-[#f3f4f6] focus:border-[#e5c158] focus:outline-none"
+            >
+              <option value="pescador">pescador</option>
+              <option value="admin">admin</option>
+            </select>
+          </li>
+        ))}
+      </ul>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+      <form onSubmit={handleCreate} className="mt-8 max-w-xl space-y-5 border-t border-white/10 pt-6">
+        <h2 className="text-lg font-bold text-[#f3f4f6]">Novo pescador</h2>
+
+        <div>
+          <label htmlFor="pes-nome" className={labelClass}>
+            Nome completo
+          </label>
           <input
+            id="pes-nome"
             type="text"
             required
             value={nome}
             onChange={(e) => setNome(e.target.value)}
-            placeholder="Nome completo"
-            className="h-11 px-4 rounded-xl bg-[#060a13] border border-white/15 text-sm text-[#f3f4f6]"
+            className={inputClass}
           />
+        </div>
+
+        <div>
+          <label htmlFor="pes-whats" className={labelClass}>
+            WhatsApp
+          </label>
           <input
+            id="pes-whats"
             type="tel"
+            inputMode="numeric"
             required
             value={whatsapp}
             onChange={(e) => setWhatsapp(e.target.value.replace(/\D/g, ''))}
-            placeholder="WhatsApp (números)"
-            className="h-11 px-4 rounded-xl bg-[#060a13] border border-white/15 text-sm text-[#f3f4f6] tabular-nums"
+            placeholder="Somente números"
+            className={`${inputClass} tabular-nums`}
           />
-          <input
-            type="text"
-            value={cidadeUf}
-            onChange={(e) => setCidadeUf(e.target.value)}
-            placeholder="Cidade - UF"
-            className="h-11 px-4 rounded-xl bg-[#060a13] border border-white/15 text-sm text-[#f3f4f6]"
-          />
-          <input
-            type="text"
-            value={equipe}
-            onChange={(e) => setEquipe(e.target.value)}
-            placeholder="Equipe"
-            className="h-11 px-4 rounded-xl bg-[#060a13] border border-white/15 text-sm text-[#f3f4f6]"
-          />
+        </div>
+
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+          <div>
+            <label htmlFor="pes-cid" className={labelClass}>
+              Cidade / UF
+            </label>
+            <input
+              id="pes-cid"
+              type="text"
+              value={cidadeUf}
+              onChange={(e) => setCidadeUf(e.target.value)}
+              className={inputClass}
+            />
+          </div>
+          <div>
+            <label htmlFor="pes-equipe" className={labelClass}>
+              Equipe
+            </label>
+            <input
+              id="pes-equipe"
+              type="text"
+              value={equipe}
+              onChange={(e) => setEquipe(e.target.value)}
+              className={inputClass}
+            />
+          </div>
+        </div>
+
+        <div>
+          <label htmlFor="pes-role" className={labelClass}>
+            Papel
+          </label>
           <select
+            id="pes-role"
             value={role}
             onChange={(e) => setRole(e.target.value as UserRole)}
-            className="h-11 px-3.5 rounded-xl bg-[#060a13] border border-white/15 text-sm text-[#f3f4f6]"
+            className={`${inputClass} cursor-pointer`}
           >
-            <option value="pescador">Pescador Competidor</option>
+            <option value="pescador">Pescador</option>
             <option value="admin">Administrador</option>
           </select>
         </div>
@@ -128,54 +176,11 @@ export default function AdminPescadoresPage() {
         <button
           type="submit"
           disabled={saving}
-          className="el-btn-gold h-11 px-6 text-xs"
+          className="flex h-12 w-full cursor-pointer items-center justify-center rounded-xl bg-[#e5c158] text-base font-bold text-[#060a13] transition-colors hover:bg-[#cfab44] disabled:opacity-60"
         >
-          {saving ? 'Cadastrando...' : 'Cadastrar e Gerar Inscrição'}
+          {saving ? 'Cadastrando...' : 'Cadastrar e inscrever'}
         </button>
       </form>
-
-      <div className="el-card overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="border-b border-white/10 bg-[#060a13] text-xs font-heading font-semibold text-[#a1a8b9]">
-                <th scope="col" className="py-3.5 px-4">Inscrição</th>
-                <th scope="col" className="py-3.5 px-4">Nome</th>
-                <th scope="col" className="py-3.5 px-4">WhatsApp</th>
-                <th scope="col" className="py-3.5 px-4">Cidade / Equipe</th>
-                <th scope="col" className="py-3.5 px-4 text-right">Nível de Acesso</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-white/10 text-sm">
-              {pescadores.map((p) => (
-                <tr key={p.id} className="hover:bg-[#0c111c]">
-                  <td className="py-3.5 px-4 font-heading font-bold text-[#e5c158] tabular-nums">
-                    {p.numero_inscricao || 'S/N'}
-                  </td>
-                  <td className="py-3.5 px-4 font-semibold text-[#f3f4f6]">{p.nome}</td>
-                  <td className="py-3.5 px-4 text-xs text-[#a1a8b9] tabular-nums">
-                    {p.whatsapp}
-                  </td>
-                  <td className="py-3.5 px-4 text-xs text-[#a1a8b9]">
-                    {p.cidade_uf} • {p.equipe}
-                  </td>
-                  <td className="py-3.5 px-4 text-right">
-                    <select
-                      aria-label={`Papel de ${p.nome}`}
-                      value={p.role}
-                      onChange={(e) => handleChangeRole(p, e.target.value as UserRole)}
-                      className="h-9 px-3 rounded-xl bg-[#060a13] border border-white/15 text-xs text-[#f3f4f6]"
-                    >
-                      <option value="pescador">pescador</option>
-                      <option value="admin">admin</option>
-                    </select>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
     </div>
   );
 }

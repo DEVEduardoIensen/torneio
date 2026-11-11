@@ -93,20 +93,21 @@ export function CategoriaConfigForm({
     }
   };
 
-  return (
-    <form onSubmit={handleSaveCategoria} className="lg:col-span-2 el-card-gold p-6 space-y-5">
-      <div className="flex items-center justify-between border-b border-white/10 pb-3">
-        <h2 className="text-lg font-heading font-bold text-[#f3f4f6]">
-          {!categoryToEdit
-            ? 'Criar Nova Categoria Dinâmica'
-            : `Editando Categoria: ${catNome}`}
-        </h2>
-      </div>
+  const inputClass =
+    'h-12 w-full rounded-xl border border-white/15 bg-transparent px-3.5 text-base text-[#f3f4f6] placeholder:text-[#a1a8b9]/60 focus:border-[#e5c158] focus:outline-none';
+  const labelClass = 'mb-1.5 block text-sm font-medium text-[#f3f4f6]';
+  const sectionClass = 'space-y-5 border-t border-white/10 pt-6';
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+  return (
+    <form onSubmit={handleSaveCategoria} className="space-y-6">
+      <h2 className="text-lg font-bold text-[#f3f4f6]">
+        {!categoryToEdit ? 'Nova categoria' : `Editar: ${categoryToEdit.nome}`}
+      </h2>
+
+      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
         <div>
-          <label htmlFor="cat-nome" className="block text-xs font-semibold text-[#f3f4f6] mb-1.5">
-            Nome da Categoria
+          <label htmlFor="cat-nome" className={labelClass}>
+            Nome
           </label>
           <input
             id="cat-nome"
@@ -114,14 +115,14 @@ export function CategoriaConfigForm({
             required
             value={catNome}
             onChange={(e) => setCatNome(e.target.value)}
-            placeholder="Ex: Dourado Rei do Rio ou Tucunaré Embarcado"
-            className="w-full h-11 px-4 rounded-xl bg-[#060a13] border border-white/15 text-sm text-[#f3f4f6]"
+            placeholder="Ex: Tucunaré Embarcado"
+            className={inputClass}
           />
         </div>
 
         <div>
-          <label htmlFor="cat-esp" className="block text-xs font-semibold text-[#f3f4f6] mb-1.5">
-            Espécie Alvo
+          <label htmlFor="cat-esp" className={labelClass}>
+            Espécie
           </label>
           <input
             id="cat-esp"
@@ -129,169 +130,177 @@ export function CategoriaConfigForm({
             required
             value={catEspecie}
             onChange={(e) => setCatEspecie(e.target.value)}
-            placeholder="Ex: Dourado (Salminus brasiliensis)"
-            className="w-full h-11 px-4 rounded-xl bg-[#060a13] border border-white/15 text-sm text-[#f3f4f6]"
+            placeholder="Ex: Dourado"
+            className={inputClass}
           />
         </div>
       </div>
 
       <div>
-        <label htmlFor="cat-desc" className="block text-xs font-semibold text-[#f3f4f6] mb-1.5">
-          Descrição e Regras Específicas da Espécie/Modalidade
+        <label htmlFor="cat-desc" className={labelClass}>
+          Regras da espécie
         </label>
         <input
           id="cat-desc"
           type="text"
           value={catDescricao}
           onChange={(e) => setCatDescricao(e.target.value)}
-          className="w-full h-11 px-4 rounded-xl bg-[#060a13] border border-white/15 text-sm text-[#f3f4f6]"
+          className={inputClass}
         />
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div>
-          <label htmlFor="cat-mod" className="block text-xs font-semibold text-[#f3f4f6] mb-1.5">
-            Modalidade
-          </label>
-          <select
-            id="cat-mod"
-            value={catModalidade}
-            onChange={(e) => setCatModalidade(e.target.value)}
-            className="w-full h-11 px-3.5 rounded-xl bg-[#060a13] border border-white/15 text-sm text-[#f3f4f6]"
-          >
-            <option value="livre">Livre (Qualquer modalidade)</option>
-            <option value="embarcado">Embarcado (Barco / Lancha)</option>
-            <option value="caiaque">Caiaque (Remo / Pedal)</option>
-            <option value="barranco_acude">Barranco / Açude</option>
-          </select>
-        </div>
-
-        <div>
-          <label htmlFor="cat-form" className="block text-xs font-semibold text-[#f3f4f6] mb-1.5">
-            Fórmula Matemática do Ranking
-          </label>
-          <select
-            id="cat-form"
-            value={catFormula}
-            onChange={(e) => setCatFormula(e.target.value as FormulaRanking)}
-            className="w-full h-11 px-3.5 rounded-xl bg-[#060a13] border border-white/15 text-sm text-[#f3f4f6]"
-          >
-            <option value="soma_top_n">Soma dos N Maiores Peixes</option>
-            <option value="maior_exemplar">Maior Exemplar Único</option>
-            <option value="soma_total">Soma Total (Sem limite)</option>
-            <option value="media_top_n">Média dos N Maiores Peixes</option>
-          </select>
-        </div>
-
-        <div>
-          <label htmlFor="cat-topn" className="block text-xs font-semibold text-[#f3f4f6] mb-1.5">
-            Quantidade N de Peixes (Top N)
-          </label>
-          <input
-            id="cat-topn"
-            type="number"
-            min={1}
-            max={50}
-            value={catTopN}
-            onChange={(e) => setCatTopN(Number(e.target.value))}
-            className="w-full h-11 px-4 rounded-xl bg-[#060a13] border border-white/15 text-sm text-[#f3f4f6] tabular-nums"
-          />
-        </div>
+      <div>
+        <label htmlFor="cat-mod" className={labelClass}>
+          Modalidade
+        </label>
+        <select
+          id="cat-mod"
+          value={catModalidade}
+          onChange={(e) => setCatModalidade(e.target.value)}
+          className={inputClass}
+        >
+          <option value="livre">Livre (qualquer modalidade)</option>
+          <option value="embarcado">Embarcado (barco / lancha)</option>
+          <option value="caiaque">Caiaque (remo / pedal)</option>
+          <option value="barranco_acude">Barranco / açude</option>
+        </select>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
-        <div>
-          <label htmlFor="cat-min" className="block text-xs font-semibold text-[#f3f4f6] mb-1.5">
-            Medida Mínima ({catUnidade})
-          </label>
-          <input
-            id="cat-min"
-            type="number"
-            step="0.5"
-            value={catMinima}
-            onChange={(e) => setCatMinima(Number(e.target.value))}
-            className="w-full h-11 px-4 rounded-xl bg-[#060a13] border border-white/15 text-sm text-[#f3f4f6] tabular-nums"
-          />
+      <div className={sectionClass}>
+        <h3 className="text-base font-bold text-[#f3f4f6]">Ranking</h3>
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+          <div>
+            <label htmlFor="cat-form" className={labelClass}>
+              Fórmula
+            </label>
+            <select
+              id="cat-form"
+              value={catFormula}
+              onChange={(e) => setCatFormula(e.target.value as FormulaRanking)}
+              className={inputClass}
+            >
+              <option value="soma_top_n">Soma dos N maiores peixes</option>
+              <option value="maior_exemplar">Maior exemplar único</option>
+              <option value="soma_total">Soma total (sem limite)</option>
+              <option value="media_top_n">Média dos N maiores peixes</option>
+            </select>
+          </div>
+
+          <div>
+            <label htmlFor="cat-topn" className={labelClass}>
+              Quantidade de peixes (N)
+            </label>
+            <input
+              id="cat-topn"
+              type="number"
+              inputMode="numeric"
+              min={1}
+              max={50}
+              value={catTopN}
+              onChange={(e) => setCatTopN(Number(e.target.value))}
+              className={`${inputClass} tabular-nums`}
+            />
+          </div>
         </div>
 
         <div>
-          <label htmlFor="cat-des" className="block text-xs font-semibold text-[#f3f4f6] mb-1.5">
+          <label htmlFor="cat-des" className={labelClass}>
             Desempate
           </label>
           <select
             id="cat-des"
             value={catDesempate}
             onChange={(e) => setCatDesempate(e.target.value as CriterioDesempate)}
-            className="w-full h-11 px-3 rounded-xl bg-[#060a13] border border-white/15 text-sm text-[#f3f4f6]"
+            className={inputClass}
           >
-            <option value="maior_peixe">Maior Peixe Individual</option>
-            <option value="captura_mais_antiga">Captura Mais Antiga</option>
+            <option value="maior_peixe">Maior peixe individual</option>
+            <option value="captura_mais_antiga">Captura mais antiga</option>
           </select>
         </div>
+      </div>
 
+      <div className={sectionClass}>
+        <h3 className="text-base font-bold text-[#f3f4f6]">Limites</h3>
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
+          <div>
+            <label htmlFor="cat-min" className={labelClass}>
+              Medida mínima ({catUnidade})
+            </label>
+            <input
+              id="cat-min"
+              type="number"
+              inputMode="decimal"
+              step="0.5"
+              value={catMinima}
+              onChange={(e) => setCatMinima(Number(e.target.value))}
+              className={`${inputClass} tabular-nums`}
+            />
+          </div>
+
+          <div>
+            <label htmlFor="cat-agua" className={labelClass}>
+              Fora d&apos;água (s)
+            </label>
+            <input
+              id="cat-agua"
+              type="number"
+              inputMode="numeric"
+              value={catTempoAgua}
+              onChange={(e) => setCatTempoAgua(Number(e.target.value))}
+              className={`${inputClass} tabular-nums`}
+            />
+          </div>
+
+          <div>
+            <label htmlFor="cat-vid" className={labelClass}>
+              Vídeo (s)
+            </label>
+            <input
+              id="cat-vid"
+              type="number"
+              inputMode="numeric"
+              value={catTempoVideo}
+              onChange={(e) => setCatTempoVideo(Number(e.target.value))}
+              className={`${inputClass} tabular-nums`}
+            />
+          </div>
+        </div>
+      </div>
+
+      <div className={sectionClass}>
         <div>
-          <label htmlFor="cat-agua" className="block text-xs font-semibold text-[#f3f4f6] mb-1.5">
-            Máx. Fora d&apos;Água (s)
+          <label htmlFor="cat-check" className={labelClass}>
+            Checklist da arbitragem (um critério por linha)
           </label>
-          <input
-            id="cat-agua"
-            type="number"
-            value={catTempoAgua}
-            onChange={(e) => setCatTempoAgua(Number(e.target.value))}
-            className="w-full h-11 px-4 rounded-xl bg-[#060a13] border border-white/15 text-sm text-[#f3f4f6] tabular-nums"
+          <textarea
+            id="cat-check"
+            rows={5}
+            value={catChecklistText}
+            onChange={(e) => setCatChecklistText(e.target.value)}
+            className="w-full rounded-xl border border-white/15 bg-transparent p-3.5 text-base text-[#f3f4f6] focus:border-[#e5c158] focus:outline-none"
           />
         </div>
 
         <div>
-          <label htmlFor="cat-vid" className="block text-xs font-semibold text-[#f3f4f6] mb-1.5">
-            Máx. Vídeo (s)
+          <label htmlFor="cat-premio" className={labelClass}>
+            Premiação do 1º lugar
           </label>
           <input
-            id="cat-vid"
-            type="number"
-            value={catTempoVideo}
-            onChange={(e) => setCatTempoVideo(Number(e.target.value))}
-            className="w-full h-11 px-4 rounded-xl bg-[#060a13] border border-white/15 text-sm text-[#f3f4f6] tabular-nums"
+            id="cat-premio"
+            type="text"
+            value={catPremio1}
+            onChange={(e) => setCatPremio1(e.target.value)}
+            className={inputClass}
           />
         </div>
-      </div>
-
-      <div>
-        <label htmlFor="cat-check" className="block text-xs font-semibold text-[#f3f4f6] mb-1.5">
-          Checklist de Validação da Mesa de Arbitragem (1 critério por linha)
-        </label>
-        <textarea
-          id="cat-check"
-          rows={4}
-          value={catChecklistText}
-          onChange={(e) => setCatChecklistText(e.target.value)}
-          className="w-full p-3.5 rounded-xl bg-[#060a13] border border-white/15 text-xs text-[#f3f4f6]"
-        />
-      </div>
-
-      <div>
-        <label htmlFor="cat-premio" className="block text-xs font-semibold text-[#f3f4f6] mb-1.5">
-          Premiação Principal da Categoria
-        </label>
-        <input
-          id="cat-premio"
-          type="text"
-          value={catPremio1}
-          onChange={(e) => setCatPremio1(e.target.value)}
-          className="w-full h-11 px-4 rounded-xl bg-[#060a13] border border-white/15 text-sm text-[#f3f4f6]"
-        />
       </div>
 
       <button
         type="submit"
         disabled={savingCat}
-        className="el-btn-gold h-11 px-6 text-sm"
+        className="flex h-12 w-full cursor-pointer items-center justify-center rounded-xl bg-[#e5c158] px-6 text-base font-bold text-[#060a13] transition-colors hover:bg-[#cfab44] disabled:opacity-60 sm:w-auto"
       >
-        {savingCat
-          ? 'Gravando Categoria...'
-          : !categoryToEdit
-          ? 'Adicionar Nova Categoria ao Torneio'
-          : 'Salvar Alterações da Categoria'}
+        {savingCat ? 'Salvando...' : !categoryToEdit ? 'Adicionar categoria' : 'Salvar categoria'}
       </button>
     </form>
   );

@@ -2,149 +2,99 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { CheckCircle2, KeyRound, MapPin, ShieldCheck, Sliders } from 'lucide-react';
+import { Settings2 } from 'lucide-react';
 import { usePainel } from '@/components/PainelContext';
+
+const REGRAS = [
+  {
+    titulo: 'No vídeo',
+    texto:
+      'Diga em voz alta a palavra-chave da etapa. A boca do peixe encostada no zero da régua, corpo esticado e a ponta da cauda visível na graduação.',
+  },
+  {
+    titulo: 'Soltura',
+    texto:
+      'O peixe volta à água com vitalidade e nada ativamente. Peixe que boiar sem reação é desclassificado.',
+  },
+  {
+    titulo: 'Isca e foto',
+    texto:
+      'Só isca artificial. Envie uma foto nítida da isca ao lado do peixe para validar e concorrer aos prêmios das marcas.',
+  },
+];
+
+function statusLabel(status: string) {
+  return status.replace(/_/g, ' ');
+}
 
 export default function PainelEtapasPage() {
   const { temporada, etapas, currentUser, loading } = usePainel();
 
   if (loading || !temporada) {
-    return (
-      <div className="py-12 text-center text-sm text-[#a1a8b9]">
-        Carregando etapas e regulamento oficial...
-      </div>
-    );
+    return <div className="py-12 text-center text-sm text-[#a1a8b9]">Carregando etapas...</div>;
   }
 
   return (
-    <div className="space-y-8">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-heading font-bold text-[#f3f4f6] tracking-tight">
-            Etapas Oficiais e Regulamento Dinâmico
-          </h1>
-          <p className="text-sm text-[#a1a8b9] mt-1">
-            Cronograma de etapas, palavras-chave vigentes e diretrizes técnicas configuradas para a temporada.
-          </p>
-        </div>
+    <div className="max-w-3xl">
+      <div className="flex items-center justify-between gap-3">
+        <h1 className="text-2xl font-bold text-[#f3f4f6] tracking-tight">Etapas</h1>
         {currentUser?.role === 'admin' && (
           <Link
             href="/painel/admin/etapas"
-            className="inline-flex items-center gap-2 h-10 px-4 rounded-xl bg-[#0d1626] hover:bg-[#121c2e] border border-[#e5c158]/30 hover:border-[#e5c158] text-xs font-semibold text-[#e5c158] transition-colors self-start"
+            aria-label="Editar etapas"
+            className="inline-flex items-center justify-center w-10 h-10 rounded-xl text-[#a1a8b9] hover:text-[#e5c158] transition-colors"
           >
-            <Sliders className="w-4 h-4" />
-            <span>Editar Etapas e Palavra-Chave</span>
+            <Settings2 className="w-5 h-5" />
           </Link>
         )}
       </div>
 
-      {/* Cronograma de Etapas */}
-      <section className="grid grid-cols-1 md:grid-cols-2 gap-5">
+      <ol className="mt-4 divide-y divide-white/10 border-y border-white/10">
         {etapas.map((etapa) => (
-          <div
-            key={etapa.id}
-            className="bg-[#080c14] border border-[#e5c158]/25 rounded-2xl p-6 flex flex-col justify-between space-y-4 shadow-xl"
-          >
-            <div>
-              <div className="flex items-center justify-between gap-2 mb-2">
-                <span className="text-xs font-heading font-bold uppercase text-[#e5c158] tabular-nums">
-                  Etapa #{etapa.numero} • {etapa.status.replace('_', ' ')}
-                </span>
-                <span className="text-xs text-[#a1a8b9] tabular-nums">
-                  {etapa.data_inicio} a {etapa.data_fim}
-                </span>
-              </div>
-              <h2 className="text-xl font-heading font-bold text-[#f3f4f6]">{etapa.titulo}</h2>
-              <p className="text-sm text-[#a1a8b9] mt-1">{etapa.subtitulo}</p>
-
-              <div className="mt-4 pt-4 border-t border-white/10 space-y-2 text-sm">
-                <div className="flex items-center gap-2 text-[#f3f4f6]">
-                  <MapPin className="w-4 h-4 text-[#e5c158] shrink-0" />
-                  <span className="text-[#a1a8b9]">Local de pesca: </span>
-                  <span>
-                    {etapa.local_pesca} ({etapa.cidade_uf})
-                  </span>
-                </div>
-                <div className="flex items-center gap-2 text-[#f3f4f6]">
-                  <KeyRound className="w-4 h-4 text-[#e5c158] shrink-0" />
-                  <span className="text-[#a1a8b9]">Palavra-Chave Oficial: </span>
-                  {etapa.revelar_palavra_chave ? (
-                    <strong className="font-mono text-[#e5c158] tabular-nums font-bold">
-                      {etapa.palavra_chave}
-                    </strong>
-                  ) : (
-                    <span className="text-xs font-mono bg-[#0d1626] px-2 py-0.5 rounded text-[#a1a8b9]">
-                      LIBERAÇÃO NO HORÁRIO DA LARGADA
-                    </span>
-                  )}
-                </div>
-              </div>
+          <li key={etapa.id} className="py-5">
+            <div className="flex items-baseline justify-between gap-3">
+              <h2 className="text-lg font-bold text-[#f3f4f6]">{etapa.titulo}</h2>
+              <span className="shrink-0 text-sm font-semibold capitalize text-[#e5c158]">
+                {statusLabel(etapa.status)}
+              </span>
             </div>
+            <p className="mt-1 text-sm text-[#a1a8b9] tabular-nums">
+              {etapa.data_inicio} a {etapa.data_fim} · {etapa.local_pesca} ({etapa.cidade_uf})
+            </p>
 
-            <div className="pt-4 border-t border-white/10 flex items-center justify-between text-xs">
-              <span className="text-[#a1a8b9]">{etapa.observacoes || 'Pesca esportiva 100% pesque e solte.'}</span>
-              <Link
-                href="/painel/registros"
-                className="font-heading font-bold text-[#e5c158] hover:text-[#cfab44]"
-              >
-                Registrar peixe →
-              </Link>
-            </div>
-          </div>
+            <p className="mt-3 text-sm text-[#a1a8b9]">
+              Palavra-chave{' '}
+              {etapa.revelar_palavra_chave ? (
+                <strong className="ml-1 text-base font-bold tracking-wide text-[#e5c158]">
+                  {etapa.palavra_chave}
+                </strong>
+              ) : (
+                <span className="ml-1 text-[#f3f4f6]">liberada na largada</span>
+              )}
+            </p>
+
+            <Link
+              href="/painel/registros"
+              className="mt-3 inline-flex h-10 items-center text-sm font-semibold text-[#e5c158] hover:text-[#cfab44]"
+            >
+              Registrar peixe →
+            </Link>
+          </li>
         ))}
-      </section>
+      </ol>
 
-      {/* Regulamento Oficial Parametrizado */}
-      <section className="bg-[#080c14] border border-white/10 rounded-2xl p-6 sm:p-8 space-y-6 shadow-xl">
-        <div className="flex items-center gap-3">
-          <ShieldCheck className="w-6 h-6 text-[#e5c158] shrink-0" />
-          <div>
-            <h2 className="text-xl font-heading font-bold text-[#f3f4f6]">
-              Diretrizes Técnicas e Regulamento Geral da Temporada
-            </h2>
-            <p className="text-xs text-[#a1a8b9] mt-0.5">
-              Validação das capturas em régua oficial padronizada e vídeo contínuo.
-            </p>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
-          <div className="space-y-2">
-            <h3 className="font-heading font-bold text-sm text-[#f3f4f6] flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-              <span>Obrigatório no Vídeo</span>
-            </h3>
-            <p className="text-xs text-[#a1a8b9] leading-relaxed">
-              O pescador deve falar em voz alta e audível a palavra-chave oficial da etapa. A boca do
-              peixe deve estar encostada no anteparo marco zero da régua plana, com o corpo esticado e
-              a ponta da cauda visível sobre a graduação métrica em centímetros.
-            </p>
-          </div>
-
-          <div className="space-y-2">
-            <h3 className="font-heading font-bold text-sm text-[#f3f4f6] flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-              <span>Soltura e Sobrevivência</span>
-            </h3>
-            <p className="text-xs text-[#a1a8b9] leading-relaxed">
-              O peixe deve retornar à água com vitalidade e nadar ativamente. Peixes que boiarem sem
-              reação serão desclassificados sumariamente pela mesa de arbitragem para assegurar a
-              preservação das matrizes reprodutoras.
-            </p>
-          </div>
-
-          <div className="space-y-2">
-            <h3 className="font-heading font-bold text-sm text-[#f3f4f6] flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-              <span>Isca Artificial e Foto</span>
-            </h3>
-            <p className="text-xs text-[#a1a8b9] leading-relaxed">
-              É obrigatório o uso de iscas artificiais. Uma foto nítida da isca ao lado do peixe deve ser
-              submetida no formulário para validação da comissão e concorrência aos prêmios das marcas
-              parceiras da temporada.
-            </p>
-          </div>
-        </div>
+      <section className="mt-10" aria-labelledby="regras-title">
+        <h2 id="regras-title" className="text-lg font-bold text-[#f3f4f6]">
+          Regras
+        </h2>
+        <dl className="mt-3 space-y-4">
+          {REGRAS.map((r) => (
+            <div key={r.titulo}>
+              <dt className="text-sm font-semibold text-[#f3f4f6]">{r.titulo}</dt>
+              <dd className="mt-0.5 text-sm leading-relaxed text-[#a1a8b9]">{r.texto}</dd>
+            </div>
+          ))}
+        </dl>
       </section>
     </div>
   );

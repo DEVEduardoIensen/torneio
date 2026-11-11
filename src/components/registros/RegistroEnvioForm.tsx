@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { KeyRound, Ruler, Upload } from 'lucide-react';
+import { Upload } from 'lucide-react';
 import { Categoria, Etapa, Pescador } from '@/types/domain';
 import { MediaUploadFields } from './MediaUploadFields';
 
@@ -32,7 +32,7 @@ export function RegistroEnvioForm({
     etapaAtiva?.revelar_palavra_chave ? etapaAtiva.palavra_chave : ''
   );
   const [capturaCompletaSemCorte, setCapturaCompletaSemCorte] = useState(false);
-  const [fotoIscaUrl, setFotoIscaUrl] = useState('/brand/peixe-dourado-tight.png');
+  const [fotoIscaUrl, setFotoIscaUrl] = useState('');
   const [videoMedicaoUrl, setVideoMedicaoUrl] = useState('');
   const [uploadingFoto, setUploadingFoto] = useState(false);
   const [uploadingVideo, setUploadingVideo] = useState(false);
@@ -114,137 +114,114 @@ export function RegistroEnvioForm({
     }
   };
 
+  const inputClass =
+    'h-12 w-full rounded-xl border border-white/15 bg-transparent px-3.5 text-base text-[#f3f4f6] placeholder:text-[#a1a8b9]/60 focus:border-[#e5c158] focus:outline-none';
+  const labelClass = 'mb-1.5 block text-sm font-medium text-[#f3f4f6]';
+  const unidade = selectedCategoria?.unidade_medida || 'cm';
+
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="lg:col-span-2 bg-[#080c14] border border-[#e5c158]/25 rounded-xl p-6 space-y-5 shadow-xl"
-    >
-      <div className="flex items-center justify-between border-b border-white/10 pb-4">
-        <div>
-          <h2 className="text-lg font-semibold text-[#f3f4f6]">
-            Dados da Captura
-          </h2>
-          <p className="text-xs text-[#a1a8b9]">
-            {currentUser?.role === 'admin' ? (
-              <span className="text-[#f3f4f6] font-medium">{currentUser?.nome} (Administrador)</span>
-            ) : (
-              <>
-                Competidor: <span className="text-[#f3f4f6] font-medium">{currentUser?.nome}</span>
-                {currentUser?.cidade_uf ? ` • ${currentUser.cidade_uf}` : ''}
-              </>
-            )}
-          </p>
-        </div>
-        {etapaAtiva && (
-          <div className="text-right">
-            <span className="text-xs text-[#a1a8b9] block">Palavra-Chave Vigente</span>
-            <strong className="font-mono text-sm text-[#e5c158] tabular-nums font-bold">
-              {etapaAtiva.revelar_palavra_chave ? etapaAtiva.palavra_chave : 'OCULTA'}
-            </strong>
-          </div>
-        )}
-      </div>
+    <form onSubmit={handleSubmit} className="max-w-xl space-y-5">
+      {etapaAtiva?.revelar_palavra_chave && (
+        <p className="text-sm text-[#a1a8b9]">
+          Palavra-chave da etapa{' '}
+          <strong className="ml-1 text-base font-bold tracking-wide text-[#e5c158]">
+            {etapaAtiva.palavra_chave}
+          </strong>
+        </p>
+      )}
 
       {feedback && (
         <div
           role="alert"
-          className={`rounded-lg px-4 py-3 text-sm font-medium border ${
+          className={`rounded-xl border px-4 py-3 text-sm font-medium ${
             feedback.type === 'ok'
-              ? 'bg-emerald-950/90 border-emerald-800 text-emerald-200'
-              : 'bg-rose-950/90 border-rose-800 text-rose-200'
+              ? 'border-emerald-800 bg-emerald-950/90 text-emerald-200'
+              : 'border-rose-800 bg-rose-950/90 text-rose-200'
           }`}
         >
           {feedback.text}
         </div>
       )}
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div>
-          <label htmlFor="especie-select" className="block text-sm font-medium text-[#f3f4f6] mb-1.5">
-            Espécie do Peixe
-          </label>
-          <select
-            id="especie-select"
-            value={categoriaId}
-            onChange={(e) => {
-              setCategoriaId(e.target.value);
-              const found = activeCategories.find((c) => c.id === e.target.value);
-              if (found) onSelectedCategoriaChange(found);
-            }}
-            className="w-full h-11 px-3.5 rounded-lg bg-[#060a13] border border-white/10 text-sm text-[#f3f4f6] focus:outline-none focus:border-[#e5c158]"
-          >
-            {activeCategories.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.especie} (Mín. {c.medida_minima} {c.unidade_medida})
-              </option>
-            ))}
-          </select>
-        </div>
+      <div>
+        <label htmlFor="especie-select" className={labelClass}>
+          Categoria
+        </label>
+        <select
+          id="especie-select"
+          value={categoriaId}
+          onChange={(e) => {
+            setCategoriaId(e.target.value);
+            const found = activeCategories.find((c) => c.id === e.target.value);
+            if (found) onSelectedCategoriaChange(found);
+          }}
+          className={inputClass}
+        >
+          {activeCategories.map((c) => (
+            <option key={c.id} value={c.id}>
+              {c.nome} (mín. {c.medida_minima} {c.unidade_medida})
+            </option>
+          ))}
+        </select>
+      </div>
 
+      <div>
+        <label htmlFor="etapa-select" className={labelClass}>
+          Etapa
+        </label>
+        <select
+          id="etapa-select"
+          value={etapaId}
+          onChange={(e) => setEtapaId(e.target.value)}
+          className={inputClass}
+        >
+          {etapas.map((et) => (
+            <option key={et.id} value={et.id}>
+              {et.titulo}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
         <div>
-          <label htmlFor="etapa-select" className="block text-sm font-medium text-[#f3f4f6] mb-1.5">
-            Etapa da temporada
+          <label htmlFor="medida-input" className={labelClass}>
+            Medida na régua ({unidade})
           </label>
-          <select
-            id="etapa-select"
-            value={etapaId}
-            onChange={(e) => setEtapaId(e.target.value)}
-            className="w-full h-11 px-3.5 rounded-lg bg-[#060a13] border border-white/10 text-sm text-[#f3f4f6] focus:outline-none focus:border-[#e5c158]"
-          >
-            {etapas.map((et) => (
-              <option key={et.id} value={et.id}>
-                {et.titulo}
-              </option>
-            ))}
-          </select>
+          <input
+            id="medida-input"
+            type="number"
+            inputMode="decimal"
+            step="0.5"
+            min={selectedCategoria?.medida_minima || 1}
+            required
+            value={medidaDeclarada}
+            onChange={(e) => setMedidaDeclarada(e.target.value)}
+            placeholder={`Ex: ${(selectedCategoria?.medida_minima || 45) + 8.5}`}
+            className={`${inputClass} tabular-nums`}
+          />
+        </div>
+        <div>
+          <label htmlFor="keyword-input" className={labelClass}>
+            Palavra-chave dita no vídeo
+          </label>
+          <input
+            id="keyword-input"
+            type="text"
+            autoCapitalize="characters"
+            required
+            value={palavraChaveInformada}
+            onChange={(e) => setPalavraChaveInformada(e.target.value.toUpperCase())}
+            placeholder="ELDORADO-77"
+            className={`${inputClass} font-bold tracking-wide text-[#e5c158]`}
+          />
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
         <div>
-          <label htmlFor="medida-input" className="block text-sm font-medium text-[#f3f4f6] mb-1.5">
-            Medida na régua ({selectedCategoria?.unidade_medida || 'cm'}) — Mínimo:{' '}
-            {selectedCategoria?.medida_minima || 30} {selectedCategoria?.unidade_medida || 'cm'}
-          </label>
-          <div className="relative">
-            <Ruler className="w-4 h-4 text-[#a1a8b9] absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-            <input
-              id="medida-input"
-              type="number"
-              step="0.5"
-              min={selectedCategoria?.medida_minima || 1}
-              required
-              value={medidaDeclarada}
-              onChange={(e) => setMedidaDeclarada(e.target.value)}
-              placeholder={`Ex: ${(selectedCategoria?.medida_minima || 45) + 8.5}`}
-              className="w-full h-11 pl-10 pr-3.5 rounded-xl bg-[#060a13] border border-white/10 text-[#f3f4f6] text-sm tabular-nums focus:outline-none focus:border-[#e5c158]"
-            />
-          </div>
-        </div>
-
-        <div>
-          <label htmlFor="keyword-input" className="block text-sm font-medium text-[#f3f4f6] mb-1.5">
-            Palavra-Chave citada no vídeo
-          </label>
-          <div className="relative">
-            <KeyRound className="w-4 h-4 text-[#e5c158] absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-            <input
-              id="keyword-input"
-              type="text"
-              required
-              value={palavraChaveInformada}
-              onChange={(e) => setPalavraChaveInformada(e.target.value.toUpperCase())}
-              placeholder="Ex: ELDORADO-77"
-              className="w-full h-11 pl-10 pr-3.5 rounded-xl bg-[#060a13] border border-white/10 text-[#e5c158] font-mono text-sm tabular-nums focus:outline-none focus:border-[#e5c158] font-bold"
-            />
-          </div>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div>
-          <label htmlFor="isca-marca" className="block text-sm font-medium text-[#f3f4f6] mb-1.5">
-            Marca da isca artificial
+          <label htmlFor="isca-marca" className={labelClass}>
+            Marca da isca
           </label>
           <input
             id="isca-marca"
@@ -252,13 +229,12 @@ export function RegistroEnvioForm({
             required
             value={iscaMarca}
             onChange={(e) => setIscaMarca(e.target.value)}
-            placeholder="Ex: Mathias Iscas"
-            className="w-full h-11 px-3.5 rounded-xl bg-[#060a13] border border-white/10 text-[#f3f4f6] text-sm focus:outline-none focus:border-[#e5c158]"
+            placeholder="Mathias Iscas"
+            className={inputClass}
           />
         </div>
-
         <div>
-          <label htmlFor="isca-modelo" className="block text-sm font-medium text-[#f3f4f6] mb-1.5">
+          <label htmlFor="isca-modelo" className={labelClass}>
             Modelo da isca
           </label>
           <input
@@ -267,25 +243,25 @@ export function RegistroEnvioForm({
             required
             value={iscaModelo}
             onChange={(e) => setIscaModelo(e.target.value)}
-            placeholder="Ex: Crank Eldorado 90"
-            className="w-full h-11 px-3.5 rounded-xl bg-[#060a13] border border-white/10 text-[#f3f4f6] text-sm focus:outline-none focus:border-[#e5c158]"
+            placeholder="Crank Eldorado 90"
+            className={inputClass}
           />
         </div>
+      </div>
 
-        <div>
-          <label htmlFor="local-input" className="block text-sm font-medium text-[#f3f4f6] mb-1.5">
-            Local / Rio / Açude
-          </label>
-          <input
-            id="local-input"
-            type="text"
-            required
-            value={localCaptura}
-            onChange={(e) => setLocalCaptura(e.target.value)}
-            placeholder="Ex: Rio Uruguai — Poço Grande"
-            className="w-full h-11 px-3.5 rounded-xl bg-[#060a13] border border-white/10 text-[#f3f4f6] text-sm focus:outline-none focus:border-[#e5c158]"
-          />
-        </div>
+      <div>
+        <label htmlFor="local-input" className={labelClass}>
+          Local da pesca
+        </label>
+        <input
+          id="local-input"
+          type="text"
+          required
+          value={localCaptura}
+          onChange={(e) => setLocalCaptura(e.target.value)}
+          placeholder="Rio Uruguai — Poço Grande"
+          className={inputClass}
+        />
       </div>
 
       <MediaUploadFields
@@ -297,33 +273,28 @@ export function RegistroEnvioForm({
         onFileUpload={handleFileUpload}
       />
 
-      <div className="pt-2 border-t border-white/10">
-        <label className="flex items-start gap-3 cursor-pointer">
-          <input
-            type="checkbox"
-            checked={capturaCompletaSemCorte}
-            onChange={(e) => setCapturaCompletaSemCorte(e.target.checked)}
-            className="mt-1 h-4 w-4 rounded border-white/20 bg-[#060a13] text-[#e5c158] focus:ring-[#e5c158]"
-          />
-          <span className="text-sm text-[#f3f4f6]">
-            <strong className="text-[#e5c158] block">
-              Concorrer ao Prêmio Especial de Captura Completa sem Corte
-            </strong>
-            Marque se o vídeo registra sem nenhum corte desde a fisgada (ataque do peixe na isca),
-            passando pela medição na régua até a soltura ativa na água.
-          </span>
-        </label>
-      </div>
+      <label className="flex min-h-11 cursor-pointer items-start gap-3">
+        <input
+          type="checkbox"
+          checked={capturaCompletaSemCorte}
+          onChange={(e) => setCapturaCompletaSemCorte(e.target.checked)}
+          className="mt-0.5 h-5 w-5 shrink-0 accent-[#e5c158]"
+        />
+        <span className="text-sm text-[#a1a8b9]">
+          <strong className="block text-base font-semibold text-[#f3f4f6]">
+            Captura completa sem corte
+          </strong>
+          Fisgada, medição e soltura no mesmo vídeo. Concorre ao prêmio especial.
+        </span>
+      </label>
 
       <button
         type="submit"
         disabled={submitting}
-        className="w-full h-11 rounded-lg bg-[#e5c158] hover:bg-[#cfab44] disabled:opacity-60 text-[#060a13] font-bold text-sm flex items-center justify-center gap-2 transition-colors cursor-pointer shadow-md"
+        className="flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-[#e5c158] text-base font-bold text-[#060a13] transition-colors hover:bg-[#cfab44] disabled:opacity-60"
       >
-        <Upload className="w-4 h-4" />
-        <span>
-          {submitting ? 'Gravando no Banco SQLite...' : 'Enviar Captura para Arbitragem'}
-        </span>
+        <Upload className="h-5 w-5" aria-hidden />
+        {submitting ? 'Enviando...' : 'Enviar captura'}
       </button>
     </form>
   );

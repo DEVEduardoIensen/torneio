@@ -2,136 +2,88 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Award, MapPin, Percent, Phone, Sliders } from 'lucide-react';
+import { MapPin, Phone, Settings2 } from 'lucide-react';
 import { usePainel } from '@/components/PainelContext';
 
 export default function PainelPatrocinadoresPage() {
   const { temporada, patrocinadores, currentUser, loading } = usePainel();
 
   if (loading || !temporada) {
-    return (
-      <div className="py-12 text-center text-sm text-[#a1a8b9]">
-        Carregando patrocinadores e parceiros...
-      </div>
-    );
+    return <div className="py-12 text-center text-sm text-[#a1a8b9]">Carregando parceiros...</div>;
   }
 
   return (
-    <div className="space-y-8">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-heading font-bold text-[#f3f4f6] tracking-tight">
-            Patrocinadores Oficiais e Prêmios de Isca
-          </h1>
-          <p className="text-sm text-[#a1a8b9] mt-1">
-            Empresas que apoiam a pesca esportiva e oferecem benefícios exclusivos aos inscritos.
-          </p>
-        </div>
-
+    <div className="max-w-3xl">
+      <div className="flex items-center justify-between gap-3">
+        <h1 className="text-2xl font-bold text-[#f3f4f6] tracking-tight">Parceiros</h1>
         {currentUser?.role === 'admin' && (
           <Link
             href="/painel/admin/patrocinadores"
-            className="inline-flex items-center gap-2 h-10 px-4 rounded-xl bg-[#0d1626] hover:bg-[#121c2e] border border-[#e5c158]/30 hover:border-[#e5c158] text-xs font-semibold text-[#e5c158] transition-colors self-start"
+            aria-label="Gerenciar patrocinadores"
+            className="inline-flex items-center justify-center w-10 h-10 rounded-xl text-[#a1a8b9] hover:text-[#e5c158] transition-colors"
           >
-            <Sliders className="w-4 h-4" />
-            <span>Gerenciar Patrocinadores</span>
+            <Settings2 className="w-5 h-5" />
           </Link>
         )}
       </div>
 
-      {/* Destaque do Benefício de Desconto Pix (Realocado da Home para Valorizar os Parceiros) */}
-      <section className="bg-gradient-to-r from-[#0d1626] to-[#080c14] border border-[#e5c158]/35 rounded-2xl p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xl">
-        <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-[#e5c158]/15 border border-[#e5c158]/30 flex items-center justify-center shrink-0">
-            <Percent className="w-6 h-6 text-[#e5c158]" />
-          </div>
-          <div>
-            <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#e5c158] uppercase tracking-wider">
-              <span>Vantagem do Competidor Inscrito</span>
-            </div>
-            <h2 className="text-lg font-bold text-[#f3f4f6] mt-0.5">
-              {temporada.beneficio_desconto_parceiros_pct}% de Desconto à Vista ou no Pix
-            </h2>
-            <p className="text-xs sm:text-sm text-[#a1a8b9] mt-0.5">
-              Válido em todas as lojas parceiras e patrocinadores oficiais apresentando seu passaporte da temporada.
-            </p>
-          </div>
+      {/* Único destaque da página: o desconto do inscrito */}
+      <div className="mt-4 flex items-center justify-between gap-4 rounded-2xl border border-[#e5c158]/40 bg-[#e5c158]/10 p-4 sm:p-5">
+        <div>
+          <p className="text-lg font-bold text-[#f3f4f6]">
+            {temporada.beneficio_desconto_parceiros_pct}% de desconto à vista ou no Pix
+          </p>
+          <p className="mt-0.5 text-sm text-[#a1a8b9]">Para inscritos, em todos os parceiros.</p>
         </div>
         <Link
           href="/painel/inscricoes"
-          className="inline-flex items-center justify-center h-10 px-4 rounded-xl bg-[#e5c158] hover:bg-[#cfab44] text-[#060a13] font-bold text-xs shrink-0 transition-colors shadow-md"
+          className="inline-flex h-11 shrink-0 items-center rounded-xl bg-[#e5c158] px-4 text-sm font-bold text-[#060a13] transition-colors hover:bg-[#cfab44]"
         >
-          Ver meu passaporte
+          Passaporte
         </Link>
-      </section>
+      </div>
 
-      <section className="grid grid-cols-1 md:grid-cols-2 gap-5">
+      <ul className="mt-6 divide-y divide-white/10 border-y border-white/10">
         {patrocinadores.map((pat) => (
-          <div
-            key={pat.id}
-            className="bg-[#080c14] border border-[#e5c158]/25 rounded-2xl p-6 flex flex-col justify-between space-y-4 shadow-xl"
-          >
-            <div>
-              <div className="flex items-start justify-between gap-4 mb-4">
-                <div>
-                  <span className="text-xs font-heading font-bold uppercase text-[#e5c158] tracking-wider">
-                    Cota {pat.cota}
-                  </span>
-                  <h2 className="text-xl font-heading font-bold text-[#f3f4f6] mt-0.5">{pat.nome}</h2>
-                  <p className="text-xs text-[#a1a8b9] mt-0.5">{pat.segmento}</p>
-                </div>
-                {pat.logo_url && (
-                  <img
-                    src={pat.logo_url}
-                    alt={pat.nome}
-                    className="h-12 w-auto object-contain shrink-0 rounded-lg p-1 bg-white/5 border border-white/10"
-                  />
-                )}
+          <li key={pat.id} className="py-5">
+            <div className="flex items-start justify-between gap-4">
+              <div className="min-w-0">
+                <h2 className="text-lg font-bold text-[#f3f4f6]">{pat.nome}</h2>
+                <p className="text-sm text-[#a1a8b9]">
+                  {pat.segmento} · Cota {pat.cota}
+                </p>
               </div>
-
-              <div className="pt-4 border-t border-white/10 space-y-3 text-sm">
-                <div>
-                  <span className="text-xs font-semibold text-[#e5c158] block">
-                    Benefício Exclusivo para Inscritos:
-                  </span>
-                  <p className="text-[#f3f4f6] mt-0.5">{pat.beneficio_competidor}</p>
-                </div>
-
-                {pat.premio_especial_isca && (
-                  <div>
-                    <span className="text-xs font-semibold text-[#e5c158] flex items-center gap-1.5">
-                      <Award className="w-4 h-4" />
-                      <span>Prêmio Especial / Bônus de Captura:</span>
-                    </span>
-                    <p className="text-[#a1a8b9] mt-0.5">{pat.premio_especial_isca}</p>
-                  </div>
-                )}
-
-                <div className="flex flex-wrap gap-4 pt-1 text-xs text-[#a1a8b9]">
-                  <span className="flex items-center gap-1">
-                    <MapPin className="w-3.5 h-3.5 text-[#e5c158]" />
-                    <span>{pat.endereco_cidade}</span>
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <Phone className="w-3.5 h-3.5 text-[#e5c158]" />
-                    <span>WhatsApp: {pat.whatsapp_contato}</span>
-                  </span>
-                </div>
-              </div>
+              {pat.logo_url && (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={pat.logo_url}
+                  alt={pat.nome}
+                  className="h-10 w-auto shrink-0 object-contain"
+                />
+              )}
             </div>
 
-            <div className="pt-4 border-t border-white/10 flex items-center justify-between text-xs">
-              <span className="text-[#a1a8b9]">Apresente seu Passaporte</span>
-              <Link
-                href="/painel/registros"
-                className="font-heading font-bold text-[#e5c158] hover:text-[#cfab44]"
-              >
-                Registrar com esta marca →
-              </Link>
-            </div>
-          </div>
+            <p className="mt-3 text-sm text-[#f3f4f6]">{pat.beneficio_competidor}</p>
+            {pat.premio_especial_isca && (
+              <p className="mt-1 text-sm text-[#a1a8b9]">
+                <span className="font-semibold text-[#e5c158]">Prêmio:</span>{' '}
+                {pat.premio_especial_isca}
+              </p>
+            )}
+
+            <p className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-[#a1a8b9]">
+              <span className="inline-flex items-center gap-1.5">
+                <MapPin className="h-4 w-4" aria-hidden />
+                {pat.endereco_cidade}
+              </span>
+              <span className="inline-flex items-center gap-1.5">
+                <Phone className="h-4 w-4" aria-hidden />
+                {pat.whatsapp_contato}
+              </span>
+            </p>
+          </li>
         ))}
-      </section>
+      </ul>
     </div>
   );
 }
